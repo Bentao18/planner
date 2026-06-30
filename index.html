@@ -351,6 +351,11 @@ input,textarea,select{font-family:inherit; color:inherit}
   .tl-wrap{height:64vh}
   .brand .sub{display:none}
 }
+@media (max-width:680px){
+  .task-add input, .notes-area,
+  .field input[type=text], .field input[type=time], .field input[type=password],
+  .field textarea, .field select, #codeInput{ font-size:16px; }
+}
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important; transition:none !important}
 }
