@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E9E3D4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Planner">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<title>Daily Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#E9E3D4; --surface:#F5F1E8; --raised:#FCFAF4; --sunk:#E1DAC8;
+  --ink:#23211B; --ink-soft:#5C574C; --ink-faint:#8C8676;
+  --line:#D7D0BE; --line-soft:#E4DECE;
+  --primary:#2B2820; --primary-ink:#F6F2E9;
+  --ring:#6E6757;
+  --danger:#9A4B3B;
+  --shadow:0 1px 2px rgba(40,36,28,.05), 0 8px 24px -12px rgba(40,36,28,.18);
+  --shadow-pop:0 12px 40px -10px rgba(40,36,28,.32);
+  --r:12px; --r-sm:9px; --r-lg:18px;
+  --gut:54px;            /* timeline hour-label gutter */
+  --hour-h:58px;        /* timeline px per hour */
+  --display:'Fraunces','IBM Plex Sans Thai',Georgia,serif;
+  --sans:'IBM Plex Sans Thai',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+[data-theme="dark"]{
+  --bg:#1A1813; --surface:#221F18; --raised:#2A261E; --sunk:#16140F;
+  --ink:#ECE6D6; --ink-soft:#A8A08D; --ink-faint:#6E6757;
+  --line:#352F25; --line-soft:#2B2720;
+  --primary:#ECE6D6; --primary-ink:#1A1813;
+  --ring:#B7AE99;
+  --danger:#D08A78;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  --shadow-pop:0 16px 50px -12px rgba(0,0,0,.7);
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  min-height:100vh; min-height:100dvh; padding-top:env(safe-area-inset-top,0px);
+  transition:background .35s ease, color .35s ease;
+}
+button{font-family:inherit; cursor:pointer; color:inherit}
+input,textarea,select{font-family:inherit; color:inherit}
+::selection{background:color-mix(in srgb, var(--ring) 30%, transparent)}
+:focus-visible{outline:2px solid var(--ring); outline-offset:2px; border-radius:6px}
+
+/* ============ SHELL ============ */
+.shell{max-width:1240px; margin:0 auto; padding:0 max(clamp(12px,3vw,28px),env(safe-area-inset-right,0px)) calc(56px + env(safe-area-inset-bottom,0px)) max(clamp(12px,3vw,28px),env(safe-area-inset-left,0px))}
+
+/* ---- top bar ---- */
+.topbar{
+  display:flex; align-items:center; gap:16px;
+  padding:18px 2px 14px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:baseline; gap:11px; margin-right:auto}
+.brand h1{
+  font-family:var(--display); font-weight:600; font-optical-sizing:auto;
+  font-size:clamp(21px,2.4vw,27px); letter-spacing:-.01em; margin:0; line-height:1;
+}
+.brand .sub{font-size:12.5px; color:var(--ink-faint); letter-spacing:.02em}
+.clock{font-family:var(--mono); font-size:13px; color:var(--ink-soft); letter-spacing:.04em; padding-top:2px}
+.tools{display:flex; align-items:center; gap:7px}
+
+.icon-btn{
+  width:38px; height:38px; display:grid; place-items:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-sm);
+  color:var(--ink-soft); transition:all .18s ease;
+}
+.icon-btn:hover{background:var(--raised); color:var(--ink); border-color:var(--ring)}
+.icon-btn svg{width:18px; height:18px}
+.icon-btn.live{position:relative}
+.sync-dot{position:absolute; top:7px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--ink-faint); transition:background .25s}
+.sync-dot.ok{background:#6f8f5e} .sync-dot.busy{background:#c79a3f; animation:pulse 1s infinite} .sync-dot.pending{background:#c79a3f}
+.sync-dot.err{background:var(--danger)} .sync-dot.off{background:var(--ink-faint)}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ---- date nav ---- */
+.datebar{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:6px 2px 18px;
+}
+.daynav{display:flex; align-items:center; gap:4px}
+.nav-arrow{
+  width:34px; height:34px; display:grid; place-items:center; border-radius:9px;
+  background:transparent; border:1px solid transparent; color:var(--ink-soft);
+}
+.nav-arrow:hover{background:var(--surface); border-color:var(--line); color:var(--ink)}
+.curdate{display:flex; flex-direction:column; min-width:188px; padding:0 6px}
+.curdate .dow{font-family:var(--display); font-weight:600; font-size:19px; line-height:1.15; letter-spacing:-.01em}
+.curdate .dnum{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); letter-spacing:.03em}
+.curdate.is-today .dow::after{content:"วันนี้"; font-family:var(--sans); font-size:10px; font-weight:600; color:var(--primary-ink); background:var(--primary); padding:2px 7px; border-radius:20px; margin-left:9px; vertical-align:middle; letter-spacing:0}
+.today-btn{
+  font-size:13px; font-weight:500; padding:7px 13px; border-radius:9px;
+  background:var(--surface); border:1px solid var(--line); color:var(--ink-soft);
+}
+.today-btn:hover{background:var(--raised); color:var(--ink); border-color:var(--ring)}
+.date-pick{position:relative; display:inline-flex}
+.date-pick input{
+  position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
+}
+
+/* ---- week strip ---- */
+.week{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:22px}
+.wday{
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:9px 0 10px; border-radius:var(--r); background:var(--surface);
+  border:1px solid var(--line-soft); transition:all .16s ease; position:relative;
+}
+.wday:hover{background:var(--raised); border-color:var(--line)}
+.wday .lbl{font-size:11px; color:var(--ink-faint); font-weight:500}
+.wday .num{font-family:var(--mono); font-size:15px; color:var(--ink-soft); font-weight:500}
+.wday.today .num{color:var(--ink)}
+.wday.today::before{content:""; width:4px; height:4px; border-radius:50%; background:var(--ring); position:absolute; bottom:5px}
+.wday.sel{background:var(--primary); border-color:var(--primary)}
+.wday.sel .lbl,.wday.sel .num{color:var(--primary-ink)}
+.wday.sel::before{background:var(--primary-ink)}
+
+/* ============ BOARD ============ */
+.tabs{display:none}
+.board{display:grid; grid-template-columns:1.32fr 1fr 1fr; gap:18px; align-items:start}
+.zone{
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--r-lg);
+  box-shadow:var(--shadow); display:flex; flex-direction:column; min-height:120px;
+}
+.zone-head{
+  display:flex; align-items:center; gap:10px; padding:16px 18px 13px;
+  border-bottom:1px solid var(--line-soft);
+}
+.zone-head .kicker{font-size:11px; font-weight:600; letter-spacing:.14em; color:var(--ink-faint); text-transform:uppercase}
+.zone-head h2{font-family:var(--display); font-weight:600; font-size:16.5px; margin:0; letter-spacing:-.01em; line-height:1}
+.zone-head .count{font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); margin-left:auto}
+.add-btn{
+  margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+  font-size:13px; font-weight:600; padding:7px 12px; border-radius:9px;
+  background:var(--primary); color:var(--primary-ink); border:1px solid var(--primary);
+  transition:transform .12s ease, opacity .12s;
+}
+.add-btn:hover{opacity:.9} .add-btn:active{transform:scale(.97)}
+.add-btn svg{width:14px; height:14px}
+.zone-body{padding:14px 16px 18px}
+
+/* ---- schedule timeline ---- */
+.tl-wrap{position:relative; height:430px; overflow-y:auto; overflow-x:hidden; border-radius:var(--r); background:var(--sunk); border:1px solid var(--line-soft)}
+.tl-wrap::-webkit-scrollbar{width:9px}
+.tl-wrap::-webkit-scrollbar-thumb{background:var(--line); border-radius:6px; border:2px solid var(--sunk)}
+.track{position:relative; margin-left:var(--gut)}
+.hour{position:absolute; left:calc(-1 * var(--gut)); right:0; border-top:1px solid var(--line-soft)}
+.hour .hh{position:absolute; left:0; top:-8px; width:var(--gut); padding-right:9px; text-align:right; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint)}
+.now-line{position:absolute; left:calc(-1 * var(--gut) + 6px); right:4px; height:0; border-top:1.5px dashed var(--danger); z-index:5; pointer-events:none}
+.now-line .nlbl{position:absolute; left:-1px; top:-7px; transform:translateX(-100%); padding-right:6px; font-family:var(--mono); font-size:9.5px; color:var(--danger); font-weight:600}
+.block{
+  position:absolute; border-radius:8px; padding:5px 8px; overflow:hidden; cursor:pointer;
+  background:color-mix(in srgb, var(--c) 20%, var(--raised));
+  border:1px solid color-mix(in srgb, var(--c) 42%, var(--line));
+  border-left:3px solid var(--c);
+  transition:filter .14s ease, transform .1s; line-height:1.25; z-index:3;
+}
+.block:hover{filter:brightness(1.04); z-index:6}
+.block:active{transform:scale(.992)}
+.block .b-time{font-family:var(--mono); font-size:10px; color:var(--ink-soft); display:block; margin-bottom:1px}
+.block .b-title{font-size:12.5px; font-weight:500; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.block.short{padding:3px 8px}
+.block.short .b-time{display:inline; margin-right:6px}
+.block.short .b-title{display:inline}
+.tl-empty{position:absolute; top:0; bottom:0; left:calc(-1 * var(--gut)); right:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; color:var(--ink-faint); text-align:center; padding:20px; pointer-events:none}
+.tl-empty svg{width:26px; height:26px; opacity:.5}
+.tl-empty span{font-size:13px}
+
+/* ---- tasks ---- */
+.task-add{display:flex; gap:8px; margin-bottom:12px}
+.task-add input{
+  flex:1; padding:10px 13px; border-radius:var(--r-sm); background:var(--raised);
+  border:1px solid var(--line); font-size:14px; transition:border-color .15s;
+}
+.task-add input:focus{outline:none; border-color:var(--ring)}
+.task-add button{
+  width:42px; border-radius:var(--r-sm); background:var(--primary); color:var(--primary-ink);
+  border:1px solid var(--primary); display:grid; place-items:center;
+}
+.task-add button svg{width:16px;height:16px}
+.tasklist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+.task{
+  display:flex; align-items:flex-start; gap:9px; padding:9px 8px; border-radius:var(--r-sm);
+  transition:background .14s ease; position:relative;
+}
+.task:hover{background:var(--raised)}
+.task.dragging{background:var(--raised); box-shadow:var(--shadow-pop); opacity:.96}
+.grip{
+  flex:0 0 auto; width:20px; align-self:stretch; display:grid; place-items:center;
+  color:var(--ink-faint); cursor:grab; touch-action:none; border-radius:5px; opacity:0; transition:opacity .14s;
+}
+.task:hover .grip{opacity:1}
+.grip:active{cursor:grabbing}
+.grip svg{width:13px;height:13px}
+.check{
+  flex:0 0 auto; width:20px; height:20px; margin-top:1px; border-radius:6px;
+  border:1.8px solid var(--line); background:var(--raised); display:grid; place-items:center;
+  transition:all .15s ease;
+}
+.check:hover{border-color:var(--ring)}
+.check svg{width:12px; height:12px; opacity:0; transform:scale(.6); transition:all .15s; color:var(--primary-ink)}
+.task.done .check{background:var(--primary); border-color:var(--primary)}
+.task.done .check svg{opacity:1; transform:scale(1)}
+.t-label{flex:1; font-size:14.5px; padding:1px 2px; border-radius:5px; line-height:1.4; word-break:break-word; min-width:0}
+.t-label:focus{outline:none; background:var(--sunk); box-shadow:inset 0 0 0 1px var(--ring)}
+.task.done .t-label{color:var(--ink-faint); text-decoration:line-through; text-decoration-color:var(--ink-faint)}
+.task.flag .t-label{color:var(--ink)}
+.flag-btn{flex:0 0 auto; width:26px; height:26px; display:grid; place-items:center; border-radius:6px; background:transparent; border:none; color:var(--ink-faint); opacity:0; transition:opacity .14s, color .14s}
+.task:hover .flag-btn,.task.flag .flag-btn{opacity:1}
+.flag-btn svg{width:14px;height:14px}
+.task.flag .flag-btn{color:var(--danger)}
+.t-del{flex:0 0 auto; width:26px; height:26px; display:grid; place-items:center; border-radius:6px; background:transparent; border:none; color:var(--ink-faint); opacity:0; transition:opacity .14s}
+.task:hover .t-del{opacity:1}
+.t-del:hover{color:var(--danger)}
+.t-del svg{width:14px;height:14px}
+.list-empty{text-align:center; color:var(--ink-faint); font-size:13px; padding:18px 8px 10px}
+
+/* ---- notes ---- */
+.notes-area{
+  width:100%; min-height:300px; resize:vertical; border-radius:var(--r); padding:14px 15px;
+  background:var(--raised); border:1px solid var(--line); font-size:14.5px; line-height:1.65;
+  transition:border-color .15s;
+}
+.notes-area:focus{outline:none; border-color:var(--ring)}
+.notes-meta{display:flex; align-items:center; gap:10px; margin-top:9px; font-family:var(--mono); font-size:11px; color:var(--ink-faint)}
+.notes-meta .saved{margin-left:auto; transition:opacity .3s; opacity:0}
+.notes-meta .saved.show{opacity:1}
+
+/* ============ BUTTONS / FORMS (shared) ============ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  font-size:14px; font-weight:500; padding:10px 16px; border-radius:var(--r-sm);
+  background:var(--raised); border:1px solid var(--line); transition:all .16s ease;
+}
+.btn:hover{border-color:var(--ring)}
+.btn.primary{background:var(--primary); color:var(--primary-ink); border-color:var(--primary); font-weight:600}
+.btn.primary:hover{opacity:.9}
+.btn.ghost{background:transparent; border-color:transparent; color:var(--ink-soft)}
+.btn.ghost:hover{background:var(--surface); color:var(--ink)}
+.btn.danger{color:var(--danger); border-color:color-mix(in srgb,var(--danger) 30%, var(--line))}
+.btn.danger:hover{background:color-mix(in srgb,var(--danger) 9%, transparent)}
+.btn.sm{padding:7px 12px; font-size:13px}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:15px}
+.field label{font-size:12.5px; font-weight:600; color:var(--ink-soft); letter-spacing:.01em}
+.field .hint{font-size:11.5px; color:var(--ink-faint); font-weight:400; line-height:1.4}
+.field input[type=text],.field input[type=time],.field input[type=password],.field textarea,.field select{
+  padding:11px 13px; border-radius:var(--r-sm); background:var(--raised);
+  border:1px solid var(--line); font-size:14.5px; transition:border-color .15s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none; border-color:var(--ring)}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.swatches{display:flex; gap:9px; flex-wrap:wrap}
+.swatch{width:32px; height:32px; border-radius:50%; border:2px solid transparent; cursor:pointer; transition:transform .12s; position:relative}
+.swatch:hover{transform:scale(1.08)}
+.swatch.sel{border-color:var(--ink)}
+.swatch.sel::after{content:""; position:absolute; inset:0; border-radius:50%; box-shadow:0 0 0 2px var(--bg) inset}
+.checkbox-row{display:flex; align-items:center; gap:10px; padding:4px 0}
+.checkbox-row input{width:18px; height:18px; accent-color:var(--primary)}
+.checkbox-row label{font-size:14px; color:var(--ink)}
+
+/* ============ MODAL ============ */
+.overlay{
+  position:fixed; inset:0; background:color-mix(in srgb, var(--sunk) 70%, transparent);
+  backdrop-filter:blur(3px); display:none; align-items:flex-start; justify-content:center;
+  padding:24px 16px; z-index:100; overflow-y:auto;
+}
+.overlay.open{display:flex; animation:fade .2s ease}
+@keyframes fade{from{opacity:0}}
+.modal{
+  width:100%; max-width:440px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--shadow-pop); margin:auto;
+  animation:rise .22s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes rise{from{opacity:0; transform:translateY(12px) scale(.98)}}
+.modal-head{display:flex; align-items:center; gap:10px; padding:18px 20px 14px; border-bottom:1px solid var(--line-soft)}
+.modal-head h3{font-family:var(--display); font-weight:600; font-size:18px; margin:0; letter-spacing:-.01em}
+.modal-head .x{margin-left:auto; width:32px; height:32px; display:grid; place-items:center; border-radius:8px; background:transparent; border:none; color:var(--ink-faint)}
+.modal-head .x:hover{background:var(--raised); color:var(--ink)}
+.modal-head .x svg{width:17px;height:17px}
+.modal-body{padding:18px 20px}
+.modal-foot{display:flex; gap:10px; padding:0 20px 20px}
+.modal-foot .btn{flex:1}
+.modal-foot .spacer{flex:0 0 auto}
+.sync-status{font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); padding:10px 12px; background:var(--raised); border-radius:9px; border:1px solid var(--line-soft); margin-bottom:14px; line-height:1.5; word-break:break-word}
+.sync-status.ok{color:#6f8f5e} .sync-status.err{color:var(--danger)}
+.divider{height:1px; background:var(--line-soft); margin:16px 0}
+.btn-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px}
+
+/* ---- dropdown menu ---- */
+.menu{
+  position:absolute; top:100%; right:0; margin-top:8px; min-width:210px;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow-pop); padding:6px; z-index:90; display:none;
+}
+.menu.open{display:block; animation:rise .16s ease}
+.menu button{
+  width:100%; display:flex; align-items:center; gap:11px; padding:9px 11px;
+  border-radius:8px; background:transparent; border:none; font-size:13.5px; text-align:left; color:var(--ink-soft);
+}
+.menu button:hover{background:var(--raised); color:var(--ink)}
+.menu button svg{width:15px; height:15px; flex:0 0 auto; color:var(--ink-faint)}
+.menu .sep{height:1px; background:var(--line-soft); margin:5px 4px}
+.menu-anchor{position:relative}
+
+/* ---- toast ---- */
+.toasts{position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%); z-index:200; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none}
+.toast{
+  background:var(--primary); color:var(--primary-ink); padding:11px 18px; border-radius:24px;
+  font-size:13.5px; font-weight:500; box-shadow:var(--shadow-pop); animation:toastin .25s ease;
+  max-width:88vw;
+}
+@keyframes toastin{from{opacity:0; transform:translateY(10px)}}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1000px){
+  .board{grid-template-columns:1fr 1fr; grid-template-rows:auto auto}
+  .zone.zone-schedule{grid-row:1 / span 2; grid-column:1}
+  .zone.zone-tasks{grid-column:2; grid-row:1}
+  .zone.zone-notes{grid-column:2; grid-row:2}
+  .tl-wrap{height:520px}
+}
+@media (max-width:680px){
+  .tabs{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:18px;
+    background:var(--surface); padding:5px; border-radius:var(--r); border:1px solid var(--line-soft);
+  }
+  .tab{
+    padding:9px 0; border-radius:8px; background:transparent; border:none; font-size:13.5px;
+    font-weight:600; color:var(--ink-faint); transition:all .15s;
+  }
+  .tab.active{background:var(--primary); color:var(--primary-ink)}
+  .board{grid-template-columns:1fr; grid-template-rows:auto}
+  .zone{grid-column:1 !important; grid-row:auto !important; display:none}
+  body[data-tab="schedule"] .zone-schedule,
+  body[data-tab="tasks"] .zone-tasks,
+  body[data-tab="notes"] .zone-notes{display:flex}
+  .curdate{min-width:0; flex:1}
+  .clock{display:none}
+  .tl-wrap{height:64vh}
+  .brand .sub{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body data-tab="schedule">
+<div class="shell">
+
+  <!-- top bar -->
+  <div class="topbar">
+    <div class="brand">
+      <h1>Daily Planner</h1>
+      <span class="sub">ผังงานรายวัน</span>
+    </div>
+    <span class="clock" id="clock">--:--</span>
+    <div class="tools">
+      <button class="icon-btn live" id="syncBtn" title="ซิงค์ข้อมูล" aria-label="ซิงค์ข้อมูล">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        <span class="sync-dot off" id="syncDot"></span>
+      </button>
+      <button class="icon-btn" id="themeBtn" title="สลับธีม" aria-label="สลับธีม">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <div class="menu-anchor">
+        <button class="icon-btn" id="menuBtn" title="เมนู" aria-label="เมนู">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>
+        </button>
+        <div class="menu" id="menu">
+          <button id="mExport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>ส่งออกเป็นไฟล์ JSON</button>
+          <button id="mImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>นำเข้าไฟล์ JSON</button>
+          <div class="sep"></div>
+          <button id="mSync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8"/></svg>ตั้งค่าซิงค์ (Gist)</button>
+          <button id="mHelp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3M12 17h.01"/></svg>วิธีใช้</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- date nav -->
+  <div class="datebar">
+    <div class="daynav">
+      <button class="nav-arrow" id="prevDay" aria-label="วันก่อนหน้า"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="curdate" id="curdate">
+        <span class="dow" id="dowLabel">—</span>
+        <span class="dnum" id="dnumLabel">—</span>
+      </div>
+      <button class="nav-arrow" id="nextDay" aria-label="วันถัดไป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <button class="today-btn" id="todayBtn">วันนี้</button>
+    <div class="date-pick">
+      <button class="icon-btn" aria-label="เลือกวันที่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
+      <input type="date" id="datePick" aria-label="เลือกวันที่">
+    </div>
+  </div>
+
+  <!-- week strip -->
+  <div class="week" id="week"></div>
+
+  <!-- mobile tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="schedule">ตาราง</button>
+    <button class="tab" data-tab="tasks">งาน</button>
+    <button class="tab" data-tab="notes">โน้ต</button>
+  </div>
+
+  <!-- board -->
+  <div class="board">
+    <!-- schedule -->
+    <section class="zone zone-schedule">
+      <div class="zone-head">
+        <div>
+          <div class="kicker">Schedule</div>
+          <h2>ตารางเวลา</h2>
+        </div>
+        <button class="add-btn" id="addBlock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>บล็อก</button>
+      </div>
+      <div class="zone-body">
+        <div class="tl-wrap" id="tlWrap">
+          <div class="track" id="track"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- tasks -->
+    <section class="zone zone-tasks">
+      <div class="zone-head">
+        <div>
+          <div class="kicker">Tasks</div>
+          <h2>รายการงาน</h2>
+        </div>
+        <span class="count" id="taskCount"></span>
+      </div>
+      <div class="zone-body">
+        <div class="task-add">
+          <input type="text" id="taskInput" placeholder="เพิ่มงาน แล้วกด Enter" autocomplete="off">
+          <button id="taskAddBtn" aria-label="เพิ่มงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <ul class="tasklist" id="taskList"></ul>
+      </div>
+    </section>
+
+    <!-- notes -->
+    <section class="zone zone-notes">
+      <div class="zone-head">
+        <div>
+          <div class="kicker">Journal</div>
+          <h2>โน้ต / ไดอารี่</h2>
+        </div>
+      </div>
+      <div class="zone-body">
+        <textarea class="notes-area" id="notes" placeholder="บันทึกความคิด สิ่งที่เกิดขึ้น หรือไดอารี่ของวันนี้..."></textarea>
+        <div class="notes-meta">
+          <span id="charCount">0 ตัวอักษร</span>
+          <span class="saved" id="notesSaved">บันทึกแล้ว</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- overlay host -->
+<div class="overlay" id="overlay"></div>
+<div class="toasts" id="toasts"></div>
+<input type="file" id="fileInput" accept="application/json,.json" style="display:none">
+
+<script>
+"use strict";
+/* ===================== helpers ===================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const pad2=n=>String(n).padStart(2,"0");
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+const DOW_FULL=["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+const DOW_SHORT=["อา","จ","อ","พ","พฤ","ศ","ส"];
+const MON_SHORT=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const COLORS=[
+  {n:"ทราย",h:"#B8AE97"},{n:"เซจ",h:"#9BA98C"},{n:"ดินเผา",h:"#C29B86"},
+  {n:"สเลท",h:"#8FA0AD"},{n:"กุหลาบ",h:"#C2A0A4"},{n:"มะกอก",h:"#ADA46F"},{n:"เทา",h:"#A6A091"}
+];
+
+function keyFromDate(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+function dateFromKey(k){const[y,m,dd]=k.split("-").map(Number);return new Date(y,m-1,dd);}
+function todayKey(){return keyFromDate(new Date());}
+const hmToMin=s=>{const[h,m]=s.split(":").map(Number);return h*60+(m||0);};
+const minToHM=m=>pad2(Math.floor(m/60)%24)+":"+pad2(m%60);
+
+/* ===================== safe storage ===================== */
+const STORE_KEY="daily-planner-v1";
+const mem={};
+const storage={
+  get(k){try{return localStorage.getItem(k);}catch(e){return k in mem?mem[k]:null;}},
+  set(k,v){try{localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+};
+
+/* ===================== state ===================== */
+let state=loadState();
+let currentKey=todayKey();
+let editingBlockId=null;
+let syncTimer=null;
+
+function loadState(){
+  const raw=storage.get(STORE_KEY);
+  if(raw){try{const s=JSON.parse(raw); s.days=s.days||{}; s.settings=s.settings||{}; return s;}catch(e){}}
+  return {days:{},settings:{theme:"light",gist:{token:"",gistId:"",pass:"",auto:true}},lastModified:0};
+}
+let saveDebounce=null;
+function saveState(touch=true){
+  if(touch){ state.lastModified=Date.now(); if(state.days[currentKey]) state.days[currentKey].u=state.lastModified; }
+  clearTimeout(saveDebounce);
+  saveDebounce=setTimeout(()=>{ storage.set(STORE_KEY,JSON.stringify(state)); },180);
+  if(touch) scheduleAutoSync();
+}
+function getDay(k){
+  if(!state.days[k]) state.days[k]={blocks:[],tasks:[],note:""};
+  const d=state.days[k]; d.blocks=d.blocks||[]; d.tasks=d.tasks||[]; if(d.note==null)d.note="";
+  return d;
+}
+
+/* ===================== render: date + week ===================== */
+function renderDate(){
+  const d=dateFromKey(currentKey);
+  $("#dowLabel").textContent=DOW_FULL[d.getDay()];
+  $("#dnumLabel").textContent=d.getDate()+" "+MON_SHORT[d.getMonth()]+" "+d.getFullYear();
+  $("#curdate").classList.toggle("is-today",currentKey===todayKey());
+  $("#datePick").value=currentKey;
+}
+function renderWeek(){
+  const wrap=$("#week"); wrap.innerHTML="";
+  const d=dateFromKey(currentKey);
+  const start=new Date(d); start.setDate(d.getDate()-d.getDay()); // Sunday
+  const tk=todayKey();
+  for(let i=0;i<7;i++){
+    const day=new Date(start); day.setDate(start.getDate()+i);
+    const k=keyFromDate(day);
+    const el=document.createElement("button");
+    el.className="wday"+(k===currentKey?" sel":"")+(k===tk?" today":"");
+    el.innerHTML='<span class="lbl">'+DOW_SHORT[day.getDay()]+'</span><span class="num">'+day.getDate()+'</span>';
+    el.onclick=()=>{currentKey=k; renderAll();};
+    wrap.appendChild(el);
+  }
+}
+
+/* ===================== render: schedule timeline ===================== */
+const HOUR_H=58, PMIN=HOUR_H/60;
+function layoutBlocks(blocks){
+  const sorted=[...blocks].map(b=>({...b,_s:hmToMin(b.start),_e:Math.max(hmToMin(b.end),hmToMin(b.start)+15)}))
+    .sort((a,b)=>a._s-b._s||a._e-b._e);
+  let cols=[], group=[], lastEnd=-1, maxCols=0;
+  const flush=()=>{ group.forEach(b=>b._ncols=maxCols); group=[]; cols=[]; maxCols=0; lastEnd=-1; };
+  for(const b of sorted){
+    if(group.length && b._s>=lastEnd) flush();
+    let placed=false;
+    for(let i=0;i<cols.length;i++){ if(cols[i]<=b._s){cols[i]=b._e; b._col=i; placed=true; break;} }
+    if(!placed){ b._col=cols.length; cols.push(b._e); }
+    maxCols=Math.max(maxCols,cols.length);
+    group.push(b); lastEnd=Math.max(lastEnd,b._e);
+  }
+  flush();
+  return sorted;
+}
+function renderSchedule(){
+  const track=$("#track");
+  track.innerHTML="";
+  const day=getDay(currentKey);
+  if(day.blocks.length===0){
+    track.style.height="100%";
+    const e=document.createElement("div");
+    e.className="tl-empty";
+    e.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>ยังไม่มีบล็อกเวลา<br>แตะที่ timeline หรือปุ่ม “บล็อก” เพื่อเพิ่ม</span>';
+    track.appendChild(e);
+    return;
+  }
+  track.style.height=(24*HOUR_H)+"px";
+  // hour gridlines
+  for(let h=0;h<=24;h++){
+    const line=document.createElement("div");
+    line.className="hour"; line.style.top=(h*HOUR_H)+"px";
+    if(h<24) line.innerHTML='<span class="hh">'+pad2(h)+":00</span>";
+    track.appendChild(line);
+  }
+  const laid=layoutBlocks(day.blocks);
+  for(const b of laid){
+    const top=b._s*PMIN, height=(b._e-b._s)*PMIN;
+    const gap=3, w=(100/b._ncols);
+    const el=document.createElement("div");
+    el.className="block"+(height<34?" short":"");
+    el.style.top=top+"px";
+    el.style.height=(height-2)+"px";
+    el.style.left="calc("+(b._col*w)+"% + "+(b._col>0?gap:0)+"px)";
+    el.style.width="calc("+w+"% - "+(b._ncols>1?gap+2:6)+"px)";
+    el.style.setProperty("--c",b.color||COLORS[0].h);
+    el.innerHTML='<span class="b-time">'+b.start+"–"+b.end+'</span><span class="b-title">'+escapeHtml(b.title||"(ไม่มีชื่อ)")+'</span>';
+    el.onclick=ev=>{ev.stopPropagation(); openBlockModal(b.id);};
+    track.appendChild(el);
+  }
+  drawNowLine();
+}
+let nowEl=null;
+function drawNowLine(){
+  const track=$("#track"); if(!track) return;
+  if(nowEl&&nowEl.parentNode)nowEl.remove();
+  if(currentKey!==todayKey())return;
+  const now=new Date(); const mins=now.getHours()*60+now.getMinutes();
+  nowEl=document.createElement("div");
+  nowEl.className="now-line"; nowEl.style.top=(mins*PMIN)+"px";
+  nowEl.innerHTML='<span class="nlbl">'+pad2(now.getHours())+":"+pad2(now.getMinutes())+'</span>';
+  track.appendChild(nowEl);
+}
+// click empty timeline → add block prefilled
+$("#track").addEventListener("click",ev=>{
+  if(ev.target.closest(".block"))return;
+  const rect=$("#track").getBoundingClientRect();
+  const y=ev.clientY-rect.top;
+  let mins=clamp(Math.round((y/PMIN)/15)*15,0,24*60-15);
+  openBlockModal(null,mins);
+});
+
+/* ===================== block modal ===================== */
+function openBlockModal(id,prefillStart){
+  editingBlockId=id;
+  const day=getDay(currentKey);
+  let b=id?day.blocks.find(x=>x.id===id):null;
+  const start=b?b.start:minToHM(prefillStart!=null?prefillStart:540);
+  const end=b?b.end:minToHM((prefillStart!=null?prefillStart:540)+60);
+  const color=b?b.color:COLORS[0].h;
+  const sw=COLORS.map(c=>'<button type="button" class="swatch'+(c.h===color?" sel":"")+'" data-c="'+c.h+'" style="background:'+c.h+'" title="'+c.n+'" aria-label="'+c.n+'"></button>').join("");
+  openModal(`
+    <div class="modal-head"><h3>${id?"แก้ไขบล็อก":"เพิ่มบล็อกเวลา"}</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label>ชื่อบล็อก</label>
+        <input type="text" id="bTitle" placeholder="เช่น เขียนสคริปต์ ACD" value="${b?escapeAttr(b.title):""}"></div>
+      <div class="row2">
+        <div class="field"><label>เริ่ม</label><input type="time" id="bStart" value="${start}"></div>
+        <div class="field"><label>จบ</label><input type="time" id="bEnd" value="${end}"></div>
+      </div>
+      <div class="field"><label>สี</label><div class="swatches" id="bColors">${sw}</div></div>
+      <div class="field"><label>โน้ต <span class="hint">(ไม่บังคับ)</span></label>
+        <textarea id="bNote" rows="2" placeholder="รายละเอียดเพิ่มเติม">${b&&b.note?escapeHtml(b.note):""}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      ${id?'<button class="btn danger sm spacer" id="bDelete">ลบ</button>':""}
+      <button class="btn primary" id="bSave">${id?"บันทึก":"เพิ่มบล็อก"}</button>
+    </div>
+  `);
+  let chosen=color;
+  $$("#bColors .swatch").forEach(s=>s.onclick=()=>{chosen=s.dataset.c; $$("#bColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
+  $("#bSave").onclick=()=>{
+    const title=$("#bTitle").value.trim();
+    let st=$("#bStart").value, en=$("#bEnd").value;
+    if(!st||!en){toast("ใส่เวลาเริ่มและจบให้ครบ");return;}
+    if(hmToMin(en)<=hmToMin(st)){ en=minToHM(Math.min(hmToMin(st)+30,24*60-1)); }
+    const day=getDay(currentKey);
+    if(id){ const blk=day.blocks.find(x=>x.id===id); Object.assign(blk,{title,start:st,end:en,color:chosen,note:$("#bNote").value.trim()}); }
+    else{ day.blocks.push({id:uid(),title:title||"(ไม่มีชื่อ)",start:st,end:en,color:chosen,note:$("#bNote").value.trim()}); }
+    saveState(); closeModal(); renderSchedule();
+    toast(id?"แก้ไขบล็อกแล้ว":"เพิ่มบล็อกแล้ว");
+  };
+  if(id){ $("#bDelete").onclick=()=>{ const day=getDay(currentKey); day.blocks=day.blocks.filter(x=>x.id!==id); saveState(); closeModal(); renderSchedule(); toast("ลบบล็อกแล้ว"); }; }
+  setTimeout(()=>$("#bTitle").focus(),60);
+}
+
+/* ===================== tasks ===================== */
+function renderTasks(){
+  const day=getDay(currentKey);
+  const list=$("#taskList"); list.innerHTML="";
+  const done=day.tasks.filter(t=>t.done).length;
+  $("#taskCount").textContent=day.tasks.length?done+"/"+day.tasks.length:"";
+  if(day.tasks.length===0){
+    list.innerHTML='<li class="list-empty">ยังไม่มีงานสำหรับวันนี้</li>'; return;
+  }
+  for(const t of day.tasks){
+    const li=document.createElement("li");
+    li.className="task"+(t.done?" done":"")+(t.flag?" flag":"");
+    li.dataset.id=t.id;
+    li.innerHTML=`
+      <span class="grip" aria-label="ลากเพื่อจัดลำดับ"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg></span>
+      <button class="check" aria-label="ทำเสร็จ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
+      <span class="t-label" role="textbox" tabindex="0">${escapeHtml(t.text)}</span>
+      <button class="flag-btn" aria-label="ทำเครื่องหมายสำคัญ"><svg viewBox="0 0 24 24" fill="${t.flag?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2.5 4L17 12H4"/></svg></button>
+      <button class="t-del" aria-label="ลบงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>`;
+    const t_id=t.id;
+    $(".check",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.done=!x.done;saveState();renderTasks();};
+    $(".flag-btn",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.flag=!x.flag;saveState();renderTasks();};
+    $(".t-del",li).onclick=()=>{day.tasks=day.tasks.filter(z=>z.id!==t_id);saveState();renderTasks();toast("ลบงานแล้ว");};
+    // inline edit
+    const lbl=$(".t-label",li);
+    lbl.onclick=()=>{ if(lbl.isContentEditable)return; lbl.contentEditable="true"; lbl.focus(); placeCaretEnd(lbl); };
+    lbl.onkeydown=e=>{ if(e.key==="Enter"){e.preventDefault();lbl.blur();} if(e.key==="Escape"){lbl.textContent=t.text;lbl.blur();} };
+    lbl.onblur=()=>{ lbl.contentEditable="false"; const v=lbl.textContent.trim(); const x=day.tasks.find(z=>z.id===t_id); if(v&&v!==x.text){x.text=v;saveState();} else {lbl.textContent=x.text;} };
+    // drag
+    $(".grip",li).addEventListener("pointerdown",e=>startDrag(e,li));
+    list.appendChild(li);
+  }
+}
+function addTask(){
+  const inp=$("#taskInput"); const v=inp.value.trim(); if(!v)return;
+  getDay(currentKey).tasks.push({id:uid(),text:v,done:false,flag:false});
+  inp.value=""; saveState(); renderTasks();
+}
+$("#taskAddBtn").onclick=addTask;
+$("#taskInput").addEventListener("keydown",e=>{if(e.key==="Enter")addTask();});
+
+/* drag reorder (pointer-based, touch-safe via touch-action:none on handle) */
+let drag=null;
+function startDrag(e,item){
+  e.preventDefault();
+  drag={item,list:$("#taskList")};
+  item.classList.add("dragging");
+  try{item.setPointerCapture(e.pointerId);}catch(_){}
+  document.addEventListener("pointermove",onDragMove);
+  document.addEventListener("pointerup",onDragEnd,{once:true});
+}
+function onDragMove(e){
+  if(!drag)return;
+  const sibs=$$(".task:not(.dragging)",drag.list);
+  const after=sibs.find(s=>{const r=s.getBoundingClientRect();return e.clientY<r.top+r.height/2;});
+  if(after)drag.list.insertBefore(drag.item,after); else drag.list.appendChild(drag.item);
+}
+function onDragEnd(){
+  if(!drag)return;
+  document.removeEventListener("pointermove",onDragMove);
+  const order=$$(".task",drag.list).map(el=>el.dataset.id);
+  const day=getDay(currentKey);
+  day.tasks.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+  drag.item.classList.remove("dragging"); drag=null;
+  saveState(); renderTasks();
+}
+
+/* ===================== notes ===================== */
+let noteDebounce=null;
+const notesEl=$("#notes");
+notesEl.addEventListener("input",()=>{
+  const day=getDay(currentKey); day.note=notesEl.value;
+  $("#charCount").textContent=notesEl.value.length+" ตัวอักษร";
+  clearTimeout(noteDebounce);
+  noteDebounce=setTimeout(()=>{ saveState(); const s=$("#notesSaved"); s.classList.add("show"); setTimeout(()=>s.classList.remove("show"),1400); },500);
+});
+function renderNotes(){
+  const day=getDay(currentKey);
+  notesEl.value=day.note||"";
+  $("#charCount").textContent=(day.note||"").length+" ตัวอักษร";
+}
+
+/* ===================== render all ===================== */
+function renderAll(){ renderDate(); renderWeek(); renderSchedule(); renderTasks(); renderNotes(); }
+
+/* ===================== navigation ===================== */
+function goDay(delta){ const d=dateFromKey(currentKey); d.setDate(d.getDate()+delta); currentKey=keyFromDate(d); renderAll(); }
+$("#prevDay").onclick=()=>goDay(-1);
+$("#nextDay").onclick=()=>goDay(1);
+$("#todayBtn").onclick=()=>{currentKey=todayKey();renderAll();};
+$("#datePick").onchange=e=>{if(e.target.value){currentKey=e.target.value;renderAll();}};
+
+/* ===================== theme ===================== */
+function setTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  state.settings.theme=t; saveState(false);
+  $("#themeIcon").innerHTML = t==="dark"
+    ? '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
+    : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  $('meta[name=theme-color]').setAttribute("content", t==="dark"?"#1A1813":"#E9E3D4");
+}
+$("#themeBtn").onclick=()=>setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");
+
+/* ===================== clock + tick ===================== */
+function tick(){
+  const n=new Date();
+  $("#clock").textContent=pad2(n.getHours())+":"+pad2(n.getMinutes());
+  drawNowLine();
+}
+
+/* ===================== tabs (mobile) ===================== */
+$$(".tab").forEach(b=>b.onclick=()=>{
+  $$(".tab").forEach(x=>x.classList.remove("active")); b.classList.add("active");
+  document.body.setAttribute("data-tab",b.dataset.tab);
+});
+
+/* ===================== menu ===================== */
+const menu=$("#menu");
+$("#menuBtn").onclick=e=>{e.stopPropagation();menu.classList.toggle("open");};
+document.addEventListener("click",e=>{ if(!e.target.closest(".menu-anchor"))menu.classList.remove("open"); });
+$("#mExport").onclick=()=>{menu.classList.remove("open");exportJSON();};
+$("#mImport").onclick=()=>{menu.classList.remove("open");$("#fileInput").click();};
+$("#mSync").onclick=()=>{menu.classList.remove("open");openSyncModal();};
+$("#mHelp").onclick=()=>{menu.classList.remove("open");openHelp();};
+$("#syncBtn").onclick=()=>openSyncModal();
+
+/* ===================== export / import ===================== */
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({days:state.days,exportedAt:new Date().toISOString(),_app:"daily-planner",_v:1},null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="daily-planner-"+todayKey()+".json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  toast("ส่งออกไฟล์แล้ว");
+}
+$("#fileInput").onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+    const data=JSON.parse(r.result);
+    const days=data.days||data;
+    if(typeof days!=="object")throw 0;
+    const keys=Object.keys(days);
+    if(!confirm("นำเข้า "+keys.length+" วัน? วันที่ซ้ำกันจะถูกแทนที่ด้วยไฟล์นี้")){e.target.value="";return;}
+    const now=Date.now();
+    keys.forEach(k=>{ const d=days[k]; if(d&&d.u==null) d.u=now; state.days[k]=d; });
+    state.lastModified=now; saveState(); renderAll(); toast("นำเข้าข้อมูลแล้ว ("+keys.length+" วัน)");
+  }catch(err){toast("ไฟล์ไม่ถูกต้อง");} e.target.value=""; };
+  r.readAsText(f);
+};
+
+/* ===================== encryption (Web Crypto) ===================== */
+const cryptoOk=!!(window.crypto&&crypto.subtle);
+function b64(bytes){let s="";const c=0x8000;for(let i=0;i<bytes.length;i+=c)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+c));return btoa(s);}
+function unb64(str){const bin=atob(str);const a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;}
+async function deriveKey(pass,salt){
+  const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pass),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:120000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function encryptStr(text,pass){
+  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
+  const key=await deriveKey(pass,salt);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,new TextEncoder().encode(text)));
+  const blob=new Uint8Array(salt.length+iv.length+ct.length);
+  blob.set(salt,0);blob.set(iv,16);blob.set(ct,28);
+  return "ENCv1:"+b64(blob);
+}
+async function decryptStr(payload,pass){
+  const blob=unb64(payload.slice(6));
+  const salt=blob.slice(0,16), iv=blob.slice(16,28), ct=blob.slice(28);
+  const key=await deriveKey(pass,salt);
+  const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,ct);
+  return new TextDecoder().decode(pt);
+}
+
+/* ===================== Gist sync ===================== */
+const GIST_FILE="daily-planner-data.json";
+function gcfg(){return state.settings.gist||(state.settings.gist={token:"",gistId:"",pass:"",auto:true});}
+async function gistApi(method,path,body){
+  const res=await fetch("https://api.github.com/gists"+path,{
+    method,
+    headers:{"Authorization":"Bearer "+gcfg().token,"Accept":"application/vnd.github+json","Content-Type":"application/json"},
+    body:body?JSON.stringify(body):undefined
+  });
+  if(!res.ok){const t=await res.text().catch(()=>"");throw new Error("GitHub "+res.status+(res.status===401?" (token ไม่ถูกต้อง)":res.status===404?" (ไม่พบ Gist)":"")+" "+t.slice(0,80));}
+  return res.json();
+}
+async function buildPayload(){
+  const days={};
+  for(const k in state.days){
+    const d=state.days[k];
+    const empty=!(d.blocks&&d.blocks.length)&&!(d.tasks&&d.tasks.length)&&!(d.note&&String(d.note).trim());
+    if(empty && d.u==null) continue;
+    days[k]=d;
+  }
+  const obj={days,lastModified:state.lastModified,_v:2};
+  let content=JSON.stringify(obj);
+  if(gcfg().pass){ if(!cryptoOk)throw new Error("เบราว์เซอร์นี้เข้ารหัสไม่ได้"); content=await encryptStr(content,gcfg().pass); }
+  return content;
+}
+async function parsePayload(content){
+  if(content.startsWith("ENCv1:")){ if(!cryptoOk)throw new Error("เข้ารหัสไว้ แต่เบราว์เซอร์นี้ถอดไม่ได้"); if(!gcfg().pass)throw new Error("ข้อมูลถูกเข้ารหัส ต้องใส่ passphrase ให้ตรงกัน"); content=await decryptStr(content,gcfg().pass); }
+  return JSON.parse(content);
+}
+/* merge ราย "วัน": ฝั่งที่แก้ทีหลัง (u ใหม่กว่า) ชนะ — แก้คนละวันคนละเครื่องไม่ทับกัน */
+function mergeDays(remoteDays){
+  let changed=false;
+  for(const k in remoteDays){
+    const r=remoteDays[k]; if(!r)continue;
+    const l=state.days[k];
+    if(!l || (r.u||0)>(l.u||0)){ state.days[k]=r; changed=true; }
+  }
+  return changed;
+}
+function setSyncDot(s){ const d=$("#syncDot"); if(d) d.className="sync-dot "+s; }
+function setSyncStatus(msg,cls){ const e=$("#syncStatus"); if(e){e.textContent=msg; e.className="sync-status"+(cls?" "+cls:"");} }
+function updateSyncTitle(st){ const b=$("#syncBtn"); if(!b)return; b.title = st==="pending"?"มีการเปลี่ยนแปลงที่ยังไม่ซิงค์" : st==="busy"?"กำลังซิงค์..." : st==="err"?"ซิงค์มีปัญหา — แตะเพื่อลองใหม่" : "ซิงค์ข้อมูล"; }
+
+/* Sync Code: รวม token + gist id + passphrase เป็นโค้ดเดียว ย้ายเครื่องในขั้นตอนเดียว */
+function makeSyncCode(){
+  const c=gcfg();
+  const json=JSON.stringify({t:c.token||"",g:c.gistId||"",p:c.pass||""});
+  return "DPSYNC1:"+b64(new TextEncoder().encode(json));
+}
+function applySyncCode(code){
+  code=(code||"").trim();
+  if(!code.startsWith("DPSYNC1:"))throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
+  const o=JSON.parse(new TextDecoder().decode(unb64(code.slice(8))));
+  const c=gcfg(); c.token=o.t||""; c.gistId=o.g||""; c.pass=o.p||""; saveState(false);
+}
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); return true; }
+  catch(e){
+    try{ const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand("copy"); ta.remove(); return true; }
+    catch(_){ return false; }
+  }
+}
+
+/* syncNow = ดึง-รวม-ดัน (เส้นทางหลัก ปลอดภัยต่อหลายเครื่อง) */
+let syncing=false;
+async function syncNow(silent){
+  const c=gcfg();
+  if(!c.token||!c.gistId){ if(!silent)setSyncStatus("ใส่ token และ gist id ก่อน หรือกดสร้าง Gist","err"); return; }
+  if(!navigator.onLine){ if(!silent)setSyncStatus("ออฟไลน์อยู่ ต่อเน็ตก่อนซิงค์","err"); setSyncDot("off"); return; }
+  if(syncing) return;
+  syncing=true; setSyncDot("busy"); updateSyncTitle("busy"); if(!silent)setSyncStatus("กำลังซิงค์...","");
+  try{
+    const r=await gistApi("GET","/"+c.gistId);
+    const file=r.files&&r.files[GIST_FILE];
+    let remoteChanged=false;
+    if(file){
+      let content=file.content;
+      if(file.truncated&&file.raw_url) content=await (await fetch(file.raw_url)).text();
+      const remote=await parsePayload(content);
+      if(remote&&remote.days) remoteChanged=mergeDays(remote.days);
+    }
+    if(remoteChanged){ saveState(false); renderAll(); }
+    const content=await buildPayload();
+    await gistApi("PATCH","/"+c.gistId,{files:{[GIST_FILE]:{content}}});
+    c.lastSync=Date.now(); saveState(false);
+    setSyncDot("ok"); updateSyncTitle("ok");
+    if(!silent) setSyncStatus("ซิงค์เรียบร้อย · "+new Date().toLocaleTimeString("th-TH"),"ok");
+    if(remoteChanged) toast("อัปเดตจากอุปกรณ์อื่นแล้ว");
+    else if(!silent) toast("ซิงค์แล้ว");
+  }catch(e){ setSyncDot("err"); updateSyncTitle("err"); if(!silent) setSyncStatus("ซิงค์ไม่สำเร็จ: "+e.message,"err"); }
+  finally{ syncing=false; }
+}
+async function createGist(){
+  setSyncStatus("กำลังสร้าง Gist ใหม่...","");setSyncDot("busy");
+  try{
+    const content=await buildPayload();
+    const r=await gistApi("POST","",{description:"Daily Planner — sync data",public:false,files:{[GIST_FILE]:{content}}});
+    gcfg().gistId=r.id; saveState(false);
+    const gi=$("#gGistId"); if(gi) gi.value=r.id;
+    setSyncStatus("สร้าง Gist แล้ว · บันทึก id อัตโนมัติ — คัดลอก Sync Code ไปใช้เครื่องอื่นได้เลย","ok"); setSyncDot("ok"); updateSyncTitle("ok");
+    toast("สร้าง Gist และดันข้อมูลขึ้นแล้ว");
+  }catch(e){setSyncStatus("สร้างไม่สำเร็จ: "+e.message,"err");setSyncDot("err");}
+}
+/* force = เขียนทับทิศทางเดียว ใช้ตอนต้องการบังคับ */
+async function forcePush(){
+  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("ใส่ token และ gist id ก่อน","err");return;}
+  setSyncStatus("กำลังดันขึ้นทับคลาวด์...","");setSyncDot("busy");
+  try{ const content=await buildPayload(); await gistApi("PATCH","/"+c.gistId,{files:{[GIST_FILE]:{content}}}); c.lastSync=Date.now(); saveState(false); setSyncStatus("ดันขึ้นทับคลาวด์เรียบร้อย","ok");setSyncDot("ok");updateSyncTitle("ok");toast("ดันขึ้นแล้ว"); }
+  catch(e){setSyncDot("err");setSyncStatus("ดันไม่สำเร็จ: "+e.message,"err");}
+}
+async function forcePull(){
+  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("ใส่ token และ gist id ก่อน","err");return;}
+  if(!confirm("ดึงข้อมูลจากคลาวด์มาทับข้อมูลในเครื่องนี้ทั้งหมด?")) return;
+  setSyncStatus("กำลังดึงลงทับเครื่อง...","");setSyncDot("busy");
+  try{
+    const r=await gistApi("GET","/"+c.gistId);
+    const file=r.files&&r.files[GIST_FILE];
+    if(!file)throw new Error("ไม่พบไฟล์ข้อมูลใน Gist");
+    let content=file.content;
+    if(file.truncated&&file.raw_url) content=await (await fetch(file.raw_url)).text();
+    const remote=await parsePayload(content);
+    state.days=remote.days||{}; state.lastModified=remote.lastModified||Date.now();
+    saveState(false); renderAll();
+    setSyncStatus("ดึงลงทับเครื่องเรียบร้อย","ok");setSyncDot("ok");updateSyncTitle("ok");toast("ดึงข้อมูลจากคลาวด์แล้ว");
+  }catch(e){setSyncDot("err");setSyncStatus("ดึงไม่สำเร็จ: "+e.message,"err");}
+}
+function scheduleAutoSync(){
+  const c=gcfg();
+  if(!c.auto||!c.token||!c.gistId)return;
+  setSyncDot("pending"); updateSyncTitle("pending");
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(()=>{ if(navigator.onLine) syncNow(true); },4000);
+}
+let focusTimer=null;
+function syncOnFocus(){
+  const c=gcfg(); if(!c.token||!c.gistId||!navigator.onLine)return;
+  clearTimeout(focusTimer);
+  focusTimer=setTimeout(()=>syncNow(true),700);
+}
+
+function openSyncModal(){
+  const c=gcfg();
+  const configured=!!(c.token&&c.gistId);
+  openModal(`
+    <div class="modal-head"><h3>ตั้งค่าซิงค์</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="sync-status" id="syncStatus">${configured?"เชื่อมต่อแล้ว · ซิงค์อัตโนมัติเมื่อแก้ไขและตอนเปิด/สลับแอป":"ตั้งครั้งแรก: ใส่ token แล้วกด ‘สร้าง Gist ใหม่’ — หรือวาง Sync Code จากเครื่องอื่น"}</div>
+
+      <div class="field"><label>วาง Sync Code จากเครื่องอื่น <span class="hint">(ย้ายเครื่องในขั้นตอนเดียว)</span></label>
+        <div style="display:flex;gap:8px"><input type="text" id="codeInput" style="flex:1;min-width:0" placeholder="DPSYNC1:..." autocomplete="off"><button class="btn sm" id="codeApply">ใช้โค้ด</button></div></div>
+      <div class="divider"></div>
+
+      <div class="field"><label>GitHub Token <span class="hint">(scope: gist เท่านั้น)</span></label>
+        <input type="password" id="gToken" placeholder="ghp_... หรือ github_pat_..." value="${escapeAttr(c.token||"")}"></div>
+      <div class="field"><label>Gist ID</label>
+        <input type="text" id="gGistId" placeholder="มีอยู่แล้ววางที่นี่ หรือกดสร้างใหม่" value="${escapeAttr(c.gistId||"")}"></div>
+      <div class="field"><label>Passphrase เข้ารหัส <span class="hint">(เว้นว่าง = ไม่เข้ารหัส)</span></label>
+        <input type="password" id="gPass" placeholder="${cryptoOk?'รหัสลับสำหรับเข้ารหัสข้อมูล':'เบราว์เซอร์นี้เข้ารหัสไม่ได้'}" value="${escapeAttr(c.pass||"")}" ${cryptoOk?"":"disabled"}>
+        <span class="hint">ใส่ค่าเดียวกันทุกเครื่องจึงจะอ่านกันได้</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="gAuto" ${c.auto?"checked":""}><label for="gAuto">ซิงค์อัตโนมัติ (เมื่อแก้ไข + ตอนเปิด/สลับแอป)</label></div>
+
+      <div class="divider"></div>
+      <button class="btn primary" id="codeCopy" style="width:100%;margin-bottom:9px">คัดลอก Sync Code ของเครื่องนี้</button>
+      <div class="btn-grid">
+        <button class="btn primary" id="gSmartBtn">ซิงค์เดี๋ยวนี้</button>
+        <button class="btn" id="gCreateBtn">สร้าง Gist ใหม่</button>
+        <button class="btn sm" id="gPullBtn">ดึงลงทับ (force)</button>
+        <button class="btn sm" id="gPushBtn">ดันขึ้นทับ (force)</button>
+      </div>
+      <span class="hint" style="display:block;margin-top:10px">Sync Code มี token อยู่ข้างใน เก็บเป็นความลับ — ส่งให้ตัวเองผ่าน Universal Clipboard / AirDrop ได้</span>
+    </div>
+    <div class="modal-foot"><button class="btn primary" data-close>เสร็จ</button></div>
+  `);
+  const persist=()=>{ const g=gcfg(); g.token=$("#gToken").value.trim(); g.gistId=$("#gGistId").value.trim(); g.pass=cryptoOk?$("#gPass").value:""; g.auto=$("#gAuto").checked; saveState(false); updateSyncDotIdle(); };
+  ["gToken","gGistId","gPass","gAuto"].forEach(id=>{const el=$("#"+id);el.addEventListener("change",persist);el.addEventListener("input",persist);});
+  $("#gSmartBtn").onclick=()=>{persist();syncNow(false);};
+  $("#gCreateBtn").onclick=()=>{persist(); if(!gcfg().token){setSyncStatus("ใส่ token ก่อนสร้าง Gist","err");return;} createGist();};
+  $("#gPullBtn").onclick=()=>{persist();forcePull();};
+  $("#gPushBtn").onclick=()=>{persist();forcePush();};
+  $("#codeCopy").onclick=async()=>{ persist(); if(!gcfg().token||!gcfg().gistId){toast("ตั้งค่า token + สร้าง Gist ก่อน");return;} const ok=await copyText(makeSyncCode()); toast(ok?"คัดลอก Sync Code แล้ว":"คัดลอกไม่ได้ ลองคัดลอกเอง"); };
+  $("#codeApply").onclick=()=>{ try{ applySyncCode($("#codeInput").value); $("#gToken").value=gcfg().token; $("#gGistId").value=gcfg().gistId; $("#gPass").value=gcfg().pass; updateSyncDotIdle(); setSyncStatus("ใส่โค้ดแล้ว · กำลังดึงข้อมูล...","ok"); syncNow(false); }catch(e){ setSyncStatus("โค้ดไม่ถูกต้อง: "+e.message,"err"); toast("Sync Code ไม่ถูกต้อง"); } };
+}
+function updateSyncDotIdle(){ const c=gcfg(); setSyncDot(c.token&&c.gistId?"ok":"off"); updateSyncTitle("ok"); }
+
+/* ===================== help ===================== */
+function openHelp(){
+  openModal(`
+    <div class="modal-head"><h3>วิธีใช้</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body" style="font-size:14px;line-height:1.65;color:var(--ink-soft)">
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">ตารางเวลา</b> — กดปุ่ม “บล็อก” หรือแตะที่ timeline เปล่าๆ เพื่อเพิ่มช่วงเวลา กำหนดเริ่ม–จบและสีได้ แตะที่บล็อกเพื่อแก้/ลบ เส้นประแดงคือเวลาปัจจุบัน</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">รายการงาน</b> — พิมพ์แล้วกด Enter เพิ่มงาน · แตะข้อความเพื่อแก้ · ลากที่จุดด้านซ้ายเพื่อจัดลำดับ · ไอคอนธง= ทำเครื่องหมายสำคัญ</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">โน้ต/ไดอารี่</b> — บันทึกอิสระต่อวัน บันทึกอัตโนมัติ</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">ข้อมูล</b> — ทุกอย่างเก็บในเครื่องอัตโนมัติ (เปิดไฟล์นี้ในเบราว์เซอร์โดยตรงเพื่อให้บันทึกถาวร) · เมนู ⋯ มีส่งออก/นำเข้าไฟล์ · ตั้งค่าซิงค์ผ่าน GitHub Gist เพื่อใช้ข้ามเครื่อง</p>
+      <p style="margin:0;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)">การซิงค์ต้องต่อเน็ตและใส่ GitHub token (scope: gist) — ใส่ passphrase เพื่อเข้ารหัสก่อนอัปก็ได้</p>
+    </div>
+    <div class="modal-foot"><button class="btn primary" data-close>เข้าใจแล้ว</button></div>
+  `);
+}
+
+/* ===================== modal infra ===================== */
+const overlay=$("#overlay");
+function openModal(html){
+  overlay.innerHTML='<div class="modal">'+html+'</div>';
+  overlay.classList.add("open");
+  overlay.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModal);
+  overlay.onclick=e=>{ if(e.target===overlay)closeModal(); };
+}
+function closeModal(){ overlay.classList.remove("open"); overlay.innerHTML=""; }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.contains("open"))closeModal(); });
+
+/* ===================== util ===================== */
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function escapeAttr(s){return escapeHtml(s).replace(/'/g,"&#39;");}
+function placeCaretEnd(el){const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+function toast(msg){
+  const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+  $("#toasts").appendChild(t);
+  setTimeout(()=>{t.style.transition="opacity .3s";t.style.opacity="0";setTimeout(()=>t.remove(),300);},2200);
+}
+$("#addBlock").onclick=()=>openBlockModal(null,540);
+
+/* ===================== init ===================== */
+(function init(){
+  setTheme(state.settings.theme||"light");
+  updateSyncDotIdle();
+  renderAll();
+  tick(); setInterval(tick,30000);
+  // scroll timeline to now (or 7am)
+  setTimeout(()=>{
+    const w=$("#tlWrap"); if(!w)return;
+    const n=new Date(); const mins=currentKey===todayKey()?n.getHours()*60+n.getMinutes():7*60;
+    w.scrollTop=Math.max(0,mins*PMIN-120);
+  },80);
+  // auto-sync on load (ดึง-รวม-ดัน) + ซิงค์ตอนเปิด/สลับกลับมาที่แอป
+  const c=gcfg();
+  if(c.token&&c.gistId&&navigator.onLine){ syncNow(true).catch(()=>{}); }
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") syncOnFocus(); });
+  window.addEventListener("focus",syncOnFocus);
+  window.addEventListener("online",()=>{ updateSyncDotIdle(); syncOnFocus(); });
+  window.addEventListener("offline",()=>setSyncDot("off"));
+})();
+</script>
+</body>
+</html>
