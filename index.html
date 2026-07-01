@@ -161,15 +161,21 @@ input,textarea,select{font-family:inherit; color:inherit}
 .now-line{position:absolute; left:calc(-1 * var(--gut) + 6px); right:4px; height:0; border-top:1.5px dashed var(--danger); z-index:5; pointer-events:none}
 .now-line .nlbl{position:absolute; left:-1px; top:-7px; transform:translateX(-100%); padding-right:6px; font-family:var(--mono); font-size:9.5px; color:var(--danger); font-weight:600}
 .block{
-  position:absolute; border-radius:8px; padding:5px 8px; overflow:hidden; cursor:pointer;
+  position:absolute; border-radius:8px; padding:5px 8px; overflow:hidden; cursor:grab; touch-action:none;
   background:color-mix(in srgb, var(--c) 20%, var(--raised));
   border:1px solid color-mix(in srgb, var(--c) 42%, var(--line));
   border-left:3px solid var(--c);
   transition:filter .14s ease, transform .1s; line-height:1.25; z-index:3;
 }
 .block:hover{filter:brightness(1.04); z-index:6}
-.block:active{transform:scale(.992)}
+.block:active{transform:scale(.992); cursor:grabbing}
+.block.dragging-block{z-index:30 !important; filter:brightness(1.1); box-shadow:var(--shadow-pop); transition:none; cursor:grabbing}
+.b-resize{position:absolute; left:0; right:0; height:9px; cursor:ns-resize; touch-action:none; z-index:4}
+.b-resize-top{top:-3px} .b-resize-bot{bottom:-3px}
+.block:hover .b-resize-top{border-top:2px solid color-mix(in srgb, var(--c) 70%, var(--ink))}
+.block:hover .b-resize-bot{border-bottom:2px solid color-mix(in srgb, var(--c) 70%, var(--ink))}
 .block .b-time{font-family:var(--mono); font-size:10px; color:var(--ink-soft); display:block; margin-bottom:1px}
+.b-rec-icon{width:10px; height:10px; display:inline-block; vertical-align:-1px; margin-right:4px; opacity:.7; color:var(--ink)}
 .block .b-title{font-size:12.5px; font-weight:500; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .block.short{padding:3px 8px}
 .block.short .b-time{display:inline; margin-right:6px}
@@ -189,6 +195,11 @@ input,textarea,select{font-family:inherit; color:inherit}
   width:42px; border-radius:var(--r-sm); background:var(--primary); color:var(--primary-ink);
   border:1px solid var(--primary); display:grid; place-items:center;
 }
+.task-add button#taskRecurBtn{
+  width:38px; background:var(--surface); color:var(--ink-soft); border:1px solid var(--line);
+}
+.task-add button#taskRecurBtn:hover{background:var(--raised); color:var(--ink); border-color:var(--ring)}
+.task-add button#taskRecurBtn svg{width:16px; height:16px}
 .task-add button svg{width:16px;height:16px}
 .tasklist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
 .task{
@@ -225,6 +236,9 @@ input,textarea,select{font-family:inherit; color:inherit}
 .task:hover .t-del{opacity:1}
 .t-del:hover{color:var(--danger)}
 .t-del svg{width:14px;height:14px}
+.t-rec-icon{flex:0 0 auto; width:22px; height:22px; display:grid; place-items:center; border-radius:6px; background:transparent; border:none; color:var(--ink-faint); padding:0}
+.t-rec-icon svg{width:12px; height:12px}
+.t-rec-icon:hover{color:var(--ink); background:var(--raised)}
 .list-empty{text-align:center; color:var(--ink-faint); font-size:13px; padding:18px 8px 10px}
 
 /* ---- notes ---- */
@@ -269,6 +283,10 @@ input,textarea,select{font-family:inherit; color:inherit}
 .checkbox-row{display:flex; align-items:center; gap:10px; padding:4px 0}
 .checkbox-row input{width:18px; height:18px; accent-color:var(--primary)}
 .checkbox-row label{font-size:14px; color:var(--ink)}
+.dow-picker{display:flex; gap:6px; flex-wrap:wrap}
+.dow-chip{width:38px; height:38px; border-radius:10px; background:var(--raised); border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--ink-soft); transition:all .14s ease}
+.dow-chip:hover{border-color:var(--ring)}
+.dow-chip.sel{background:var(--primary); border-color:var(--primary); color:var(--primary-ink)}
 
 /* ============ MODAL ============ */
 .overlay{
@@ -298,6 +316,48 @@ input,textarea,select{font-family:inherit; color:inherit}
 .divider{height:1px; background:var(--line-soft); margin:16px 0}
 .btn-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px}
 
+/* ---- weekly graph ---- */
+.graph-nav{display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:18px}
+.graph-wlabel{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); min-width:150px; text-align:center}
+.graph-bars{display:flex; gap:6px; align-items:flex-end; height:140px; margin-bottom:16px; padding:0 2px}
+.gbar-col{flex:1; display:flex; flex-direction:column; align-items:center; gap:7px; height:100%}
+.gbar-track{width:100%; max-width:30px; height:100%; display:flex; flex-direction:column-reverse; background:var(--sunk); border-radius:6px; overflow:hidden}
+.gbar-fill{width:100%; display:flex; flex-direction:column-reverse}
+.gbar-seg{width:100%}
+.gbar-lbl{font-size:10.5px; color:var(--ink-faint); font-family:var(--mono)}
+.gbar-lbl.today{color:var(--ink); font-weight:700}
+.graph-total{text-align:center; font-size:13px; color:var(--ink-soft); font-weight:600; margin-bottom:14px}
+.graph-legend{display:flex; flex-direction:column; gap:9px}
+.glegend-row{display:flex; align-items:center; gap:10px; font-size:13.5px}
+.glegend-dot{width:10px; height:10px; border-radius:50%; flex:0 0 auto}
+.glegend-name{flex:1; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.glegend-val{font-family:var(--mono); font-size:12px; color:var(--ink-soft); flex:0 0 auto}
+
+/* ---- category management ---- */
+.cat-row{display:flex; align-items:center; gap:9px; padding:8px 2px}
+.cat-dot{width:11px; height:11px; border-radius:50%; flex:0 0 auto}
+.cat-name-input{flex:1; min-width:0; border:none; background:transparent; font-size:14px; color:var(--ink); padding:7px 6px; border-radius:6px}
+.cat-name-input:focus{outline:none; background:var(--raised); box-shadow:inset 0 0 0 1px var(--ring)}
+.cat-recolor{width:26px; height:26px; border-radius:50%; border:2px solid var(--line); flex:0 0 auto; padding:0}
+.cat-del{width:26px; height:26px; display:grid; place-items:center; border-radius:6px; background:transparent; border:none; color:var(--ink-faint); flex:0 0 auto}
+.cat-del:hover{color:var(--danger); background:var(--raised)}
+
+/* ---- carry-over bar ---- */
+.carryover-bar{display:flex; align-items:center; gap:10px; padding:9px 12px; margin-bottom:12px; border-radius:var(--r-sm); background:color-mix(in srgb, var(--ring) 14%, var(--raised)); border:1px solid color-mix(in srgb, var(--ring) 30%, var(--line))}
+.carryover-bar span{flex:1; font-size:12.5px; color:var(--ink-soft); line-height:1.4}
+.carryover-bar button{flex:0 0 auto; font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:8px; background:var(--primary); color:var(--primary-ink); border:1px solid var(--primary)}
+
+/* ---- templates ---- */
+.tpl-row{display:flex; align-items:center; gap:9px; padding:9px 2px; border-bottom:1px solid var(--line-soft)}
+.tpl-row:last-child{border-bottom:none}
+.tpl-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:1px}
+.tpl-name-input{border:none; background:transparent; font-size:14px; color:var(--ink); padding:4px; border-radius:5px; width:100%}
+.tpl-name-input:focus{outline:none; background:var(--raised); box-shadow:inset 0 0 0 1px var(--ring)}
+.tpl-meta{font-size:11px; color:var(--ink-faint); font-family:var(--mono); padding:0 4px}
+.tpl-apply{flex:0 0 auto}
+.tpl-del{flex:0 0 auto; width:26px; height:26px; display:grid; place-items:center; border-radius:6px; background:transparent; border:none; color:var(--ink-faint)}
+.tpl-del:hover{color:var(--danger); background:var(--raised)}
+
 /* ---- dropdown menu ---- */
 .menu{
   position:absolute; top:100%; right:0; margin-top:8px; min-width:210px;
@@ -317,10 +377,15 @@ input,textarea,select{font-family:inherit; color:inherit}
 /* ---- toast ---- */
 .toasts{position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%); z-index:200; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none}
 .toast{
-  background:var(--primary); color:var(--primary-ink); padding:11px 18px; border-radius:24px;
+  background:var(--primary); color:var(--primary-ink); padding:11px 14px 11px 18px; border-radius:24px;
   font-size:13.5px; font-weight:500; box-shadow:var(--shadow-pop); animation:toastin .25s ease;
-  max-width:88vw;
+  max-width:88vw; pointer-events:auto; display:flex; align-items:center; gap:14px;
 }
+.toast-action{
+  background:color-mix(in srgb, var(--primary-ink) 16%, transparent); border:none; color:var(--primary-ink);
+  font-size:13px; font-weight:700; padding:6px 12px; border-radius:16px; flex:0 0 auto; white-space:nowrap;
+}
+.toast-action:hover{background:color-mix(in srgb, var(--primary-ink) 26%, transparent)}
 @keyframes toastin{from{opacity:0; transform:translateY(10px)}}
 
 /* ============ RESPONSIVE ============ */
@@ -351,6 +416,7 @@ input,textarea,select{font-family:inherit; color:inherit}
   .tl-wrap{height:64vh}
   .brand .sub{display:none}
 }
+/* กัน iOS Safari ซูมเข้าอัตโนมัติเมื่อโฟกัสช่องพิมพ์: บังคับ input >=16px บนจอเล็ก */
 @media (max-width:680px){
   .task-add input, .notes-area,
   .field input[type=text], .field input[type=time], .field input[type=password],
@@ -376,6 +442,9 @@ input,textarea,select{font-family:inherit; color:inherit}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
         <span class="sync-dot off" id="syncDot"></span>
       </button>
+      <button class="icon-btn" id="graphBtn" title="สรุปเวลารายสัปดาห์" aria-label="สรุปเวลารายสัปดาห์">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M12 20V4M20 20v-7"/></svg>
+      </button>
       <button class="icon-btn" id="themeBtn" title="สลับธีม" aria-label="สลับธีม">
         <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
@@ -388,6 +457,7 @@ input,textarea,select{font-family:inherit; color:inherit}
           <button id="mImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>นำเข้าไฟล์ JSON</button>
           <div class="sep"></div>
           <button id="mSync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8"/></svg>ตั้งค่าซิงค์ (Gist)</button>
+          <button id="mTemplates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>เทมเพลตตาราง</button>
           <button id="mHelp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3M12 17h.01"/></svg>วิธีใช้</button>
         </div>
       </div>
@@ -449,8 +519,13 @@ input,textarea,select{font-family:inherit; color:inherit}
         <span class="count" id="taskCount"></span>
       </div>
       <div class="zone-body">
+        <div class="carryover-bar" id="carryoverBar" style="display:none">
+          <span id="carryoverText"></span>
+          <button type="button" id="carryoverBtn">ย้ายมาวันนี้</button>
+        </div>
         <div class="task-add">
           <input type="text" id="taskInput" placeholder="เพิ่มงาน แล้วกด Enter" autocomplete="off">
+          <button id="taskRecurBtn" type="button" aria-label="เพิ่มงานทำซ้ำ" title="เพิ่มงานทำซ้ำทุกสัปดาห์"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
           <button id="taskAddBtn" aria-label="เพิ่มงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <ul class="tasklist" id="taskList"></ul>
@@ -497,6 +572,11 @@ const COLORS=[
   {n:"ทราย",h:"#B8AE97"},{n:"เซจ",h:"#9BA98C"},{n:"ดินเผา",h:"#C29B86"},
   {n:"สเลท",h:"#8FA0AD"},{n:"กุหลาบ",h:"#C2A0A4"},{n:"มะกอก",h:"#ADA46F"},{n:"เทา",h:"#A6A091"}
 ];
+function catById(id){ return id?(state.categories||[]).find(c=>c.id===id):null; }
+function blockColor(b){ const cat=catById(b.categoryId); return cat?cat.color:(b.color||COLORS[0].h); }
+function swatchesHtml(selectedColor,idPrefix){
+  return COLORS.map(c=>'<button type="button" class="swatch'+(c.h===selectedColor?" sel":"")+'" data-c="'+c.h+'" style="background:'+c.h+'" title="'+c.n+'" aria-label="'+c.n+'"></button>').join("");
+}
 
 function keyFromDate(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
 function dateFromKey(k){const[y,m,dd]=k.split("-").map(Number);return new Date(y,m-1,dd);}
@@ -520,8 +600,8 @@ let syncTimer=null;
 
 function loadState(){
   const raw=storage.get(STORE_KEY);
-  if(raw){try{const s=JSON.parse(raw); s.days=s.days||{}; s.settings=s.settings||{}; return s;}catch(e){}}
-  return {days:{},settings:{theme:"light",gist:{token:"",gistId:"",pass:"",auto:true}},lastModified:0};
+  if(raw){try{const s=JSON.parse(raw); s.days=s.days||{}; s.settings=s.settings||{}; s.categories=s.categories||[]; s.categoriesUpdated=s.categoriesUpdated||0; s.recurring=s.recurring||[]; s.recurringUpdated=s.recurringUpdated||0; s.templates=s.templates||[]; s.templatesUpdated=s.templatesUpdated||0; return s;}catch(e){}}
+  return {days:{},settings:{theme:"light",gist:{token:"",gistId:"",pass:"",auto:true}},categories:[],categoriesUpdated:0,recurring:[],recurringUpdated:0,templates:[],templatesUpdated:0,lastModified:0};
 }
 let saveDebounce=null;
 function saveState(touch=true){
@@ -562,8 +642,18 @@ function renderWeek(){
 
 /* ===================== render: schedule timeline ===================== */
 const HOUR_H=58, PMIN=HOUR_H/60;
+function recurringBlocksForDate(dateObj,dateKey){
+  const dow=dateObj.getDay(), out=[];
+  for(const t of (state.recurring||[])){
+    if(t.type!=="block")continue;
+    if(!t.days||!t.days.includes(dow))continue;
+    if(t.skipDates&&t.skipDates.includes(dateKey))continue;
+    out.push({id:"rec:"+t.id,title:t.title,start:t.start,end:t.end,color:t.color,categoryId:t.categoryId,note:t.note,isRecurring:true,recurringId:t.id});
+  }
+  return out;
+}
 function layoutBlocks(blocks){
-  const sorted=[...blocks].map(b=>({...b,_s:hmToMin(b.start),_e:Math.max(hmToMin(b.end),hmToMin(b.start)+15)}))
+  const sorted=[...blocks].map(b=>{let s=hmToMin(b.start),e=hmToMin(b.end); if(e<=s)e+=1440; return {...b,_s:s,_e:e};})
     .sort((a,b)=>a._s-b._s||a._e-b._e);
   let cols=[], group=[], lastEnd=-1, maxCols=0;
   const flush=()=>{ group.forEach(b=>b._ncols=maxCols); group=[]; cols=[]; maxCols=0; lastEnd=-1; };
@@ -582,7 +672,9 @@ function renderSchedule(){
   const track=$("#track");
   track.innerHTML="";
   const day=getDay(currentKey);
-  if(day.blocks.length===0){
+  const dateObj=dateFromKey(currentKey);
+  const visibleBlocks=[...day.blocks,...recurringBlocksForDate(dateObj,currentKey)];
+  if(visibleBlocks.length===0){
     track.style.height="100%";
     const e=document.createElement("div");
     e.className="tl-empty";
@@ -598,9 +690,9 @@ function renderSchedule(){
     if(h<24) line.innerHTML='<span class="hh">'+pad2(h)+":00</span>";
     track.appendChild(line);
   }
-  const laid=layoutBlocks(day.blocks);
+  const laid=layoutBlocks(visibleBlocks);
   for(const b of laid){
-    const top=b._s*PMIN, height=(b._e-b._s)*PMIN;
+    const top=b._s*PMIN, height=(Math.min(b._e,1440)-b._s)*PMIN;
     const gap=3, w=(100/b._ncols);
     const el=document.createElement("div");
     el.className="block"+(height<34?" short":"");
@@ -608,9 +700,11 @@ function renderSchedule(){
     el.style.height=(height-2)+"px";
     el.style.left="calc("+(b._col*w)+"% + "+(b._col>0?gap:0)+"px)";
     el.style.width="calc("+w+"% - "+(b._ncols>1?gap+2:6)+"px)";
-    el.style.setProperty("--c",b.color||COLORS[0].h);
-    el.innerHTML='<span class="b-time">'+b.start+"–"+b.end+'</span><span class="b-title">'+escapeHtml(b.title||"(ไม่มีชื่อ)")+'</span>';
-    el.onclick=ev=>{ev.stopPropagation(); openBlockModal(b.id);};
+    el.style.setProperty("--c",blockColor(b));
+    const recIcon=b.isRecurring?'<svg class="b-rec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>':"";
+    el.innerHTML='<div class="b-resize b-resize-top"></div>'+recIcon+'<span class="b-time">'+b.start+"–"+b.end+'</span><span class="b-title">'+escapeHtml(b.title||"(ไม่มีชื่อ)")+'</span><div class="b-resize b-resize-bot"></div>';
+    el.onclick=ev=>{ev.stopPropagation(); if(el.dataset.justDragged)return; if(b.isRecurring)openRecurringBlockModal(b.recurringId,currentKey); else openBlockModal(b.id);};
+    attachBlockDrag(el,b,currentKey);
     track.appendChild(el);
   }
   drawNowLine();
@@ -635,6 +729,60 @@ $("#track").addEventListener("click",ev=>{
   openBlockModal(null,mins);
 });
 
+/* ---- drag/resize block directly on timeline ---- */
+function attachBlockDrag(el,b,dayKeyAtRender){
+  const MIN_DUR=15, THRESH=4;
+  let downY=0, moved=false, startTop=0, startHeight=0, mode=null;
+  function pxToSnapMin(px){ return Math.round((px/PMIN)/15)*15; }
+  function onDown(ev,m){
+    if(ev.button!=null && ev.button!==0)return;
+    ev.stopPropagation();
+    mode=m; moved=false; downY=ev.clientY;
+    startTop=parseFloat(el.style.top); startHeight=parseFloat(el.style.height);
+    document.addEventListener("pointermove",onMove);
+    document.addEventListener("pointerup",onUp,{once:true});
+  }
+  function onMove(ev){
+    const dy=ev.clientY-downY;
+    if(!moved && Math.abs(dy)>THRESH){ moved=true; el.classList.add("dragging-block"); }
+    if(!moved)return;
+    if(mode==="move"){ el.style.top=(startTop+dy)+"px"; }
+    else if(mode==="resize-top"){ const nh=startHeight-dy; if(nh>=MIN_DUR*PMIN-2){ el.style.top=(startTop+dy)+"px"; el.style.height=nh+"px"; } }
+    else if(mode==="resize-bot"){ const nh=startHeight+dy; if(nh>=MIN_DUR*PMIN-2){ el.style.height=nh+"px"; } }
+  }
+  function onUp(){
+    document.removeEventListener("pointermove",onMove);
+    el.classList.remove("dragging-block");
+    if(!moved){ mode=null; return; }
+    el.dataset.justDragged="1"; setTimeout(()=>{delete el.dataset.justDragged;},80);
+    const target=b.isRecurring?(state.recurring||[]).find(t=>t.id===b.recurringId):getDay(dayKeyAtRender).blocks.find(x=>x.id===b.id);
+    if(target){
+      if(mode==="move"){
+        const s0=hmToMin(target.start), e0=hmToMin(target.end);
+        const dur=e0<=s0?(e0+1440-s0):(e0-s0);
+        const newStart=clamp(pxToSnapMin(parseFloat(el.style.top)),0,1439);
+        target.start=minToHM(newStart); target.end=minToHM(newStart+dur);
+      }else if(mode==="resize-top"){
+        const endMin=hmToMin(target.end);
+        const newStart=clamp(pxToSnapMin(parseFloat(el.style.top)),0,endMin-MIN_DUR);
+        target.start=minToHM(newStart);
+      }else if(mode==="resize-bot"){
+        const startMin=hmToMin(target.start);
+        const newEnd=clamp(startMin+pxToSnapMin(parseFloat(el.style.height)+2),startMin+MIN_DUR,1440);
+        target.end=minToHM(newEnd);
+      }
+      if(b.isRecurring){ target.u=Date.now(); state.recurringUpdated=Date.now(); }
+      saveState();
+    }
+    if(currentKey===dayKeyAtRender) renderSchedule();
+    mode=null;
+  }
+  el.addEventListener("pointerdown",ev=>{ if(ev.target.classList.contains("b-resize"))return; onDown(ev,"move"); });
+  const th=el.querySelector(".b-resize-top"), bh=el.querySelector(".b-resize-bot");
+  if(th) th.addEventListener("pointerdown",ev=>onDown(ev,"resize-top"));
+  if(bh) bh.addEventListener("pointerdown",ev=>onDown(ev,"resize-bot"));
+}
+
 /* ===================== block modal ===================== */
 function openBlockModal(id,prefillStart){
   editingBlockId=id;
@@ -643,7 +791,15 @@ function openBlockModal(id,prefillStart){
   const start=b?b.start:minToHM(prefillStart!=null?prefillStart:540);
   const end=b?b.end:minToHM((prefillStart!=null?prefillStart:540)+60);
   const color=b?b.color:COLORS[0].h;
-  const sw=COLORS.map(c=>'<button type="button" class="swatch'+(c.h===color?" sel":"")+'" data-c="'+c.h+'" style="background:'+c.h+'" title="'+c.n+'" aria-label="'+c.n+'"></button>').join("");
+  const curCatId=b&&b.categoryId?b.categoryId:"";
+  const sw=swatchesHtml(color);
+  const catOptions=(state.categories||[]).map(c=>'<option value="'+c.id+'"'+(c.id===curCatId?" selected":"")+'>'+escapeHtml(c.name)+'</option>').join("");
+  const recurUI=id?"":(
+    '<div class="checkbox-row"><input type="checkbox" id="bRecurToggle"><label for="bRecurToggle">ทำซ้ำทุกสัปดาห์</label></div>'+
+    '<div class="field" id="bRecurRow" style="display:none"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="bRecurDays">'+
+    DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip" data-d="'+i+'">'+d+'</button>').join("")+
+    '</div></div>'
+  );
   openModal(`
     <div class="modal-head"><h3>${id?"แก้ไขบล็อก":"เพิ่มบล็อกเวลา"}</h3>
       <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
@@ -654,7 +810,21 @@ function openBlockModal(id,prefillStart){
         <div class="field"><label>เริ่ม</label><input type="time" id="bStart" value="${start}"></div>
         <div class="field"><label>จบ</label><input type="time" id="bEnd" value="${end}"></div>
       </div>
-      <div class="field"><label>สี</label><div class="swatches" id="bColors">${sw}</div></div>
+      ${recurUI}
+      <div class="field"><label>หมวดหมู่ <span class="hint">(ไม่บังคับ)</span></label>
+        <select id="bCategory">
+          <option value="">ไม่มีหมวดหมู่</option>
+          ${catOptions}
+          <option value="__new__">+ เพิ่มหมวดหมู่ใหม่...</option>
+        </select>
+      </div>
+      <div class="field" id="bNewCatRow" style="display:none">
+        <label>ชื่อหมวดหมู่ใหม่</label>
+        <input type="text" id="bNewCatName" placeholder="เช่น ACD, อาร์ต, แอดมิน">
+        <div class="swatches" id="bNewCatColors" style="margin-top:8px">${swatchesHtml(COLORS[0].h)}</div>
+        <button type="button" class="btn sm primary" id="bNewCatConfirm" style="margin-top:9px;width:100%">สร้างหมวดหมู่นี้</button>
+      </div>
+      <div class="field" id="bColorField" style="${curCatId?"display:none":""}"><label>สี</label><div class="swatches" id="bColors">${sw}</div></div>
       <div class="field"><label>โน้ต <span class="hint">(ไม่บังคับ)</span></label>
         <textarea id="bNote" rows="2" placeholder="รายละเอียดเพิ่มเติม">${b&&b.note?escapeHtml(b.note):""}</textarea></div>
     </div>
@@ -663,25 +833,378 @@ function openBlockModal(id,prefillStart){
       <button class="btn primary" id="bSave">${id?"บันทึก":"เพิ่มบล็อก"}</button>
     </div>
   `);
-  let chosen=color;
+  let chosen=color, newCatColor=COLORS[0].h, recurDays=new Set();
   $$("#bColors .swatch").forEach(s=>s.onclick=()=>{chosen=s.dataset.c; $$("#bColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
+  $$("#bNewCatColors .swatch").forEach(s=>s.onclick=()=>{newCatColor=s.dataset.c; $$("#bNewCatColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
+  if(!id){
+    const rt=$("#bRecurToggle");
+    rt.onchange=()=>{ $("#bRecurRow").style.display=rt.checked?"":"none"; };
+    $$("#bRecurDays .dow-chip").forEach(ch=>ch.onclick=()=>{
+      const d=+ch.dataset.d;
+      if(recurDays.has(d)){recurDays.delete(d);ch.classList.remove("sel");}
+      else{recurDays.add(d);ch.classList.add("sel");}
+    });
+  }
+  const catSel=$("#bCategory");
+  function syncColorFieldVisibility(){ $("#bColorField").style.display=catSel.value?"none":""; }
+  catSel.onchange=()=>{
+    if(catSel.value==="__new__"){ $("#bNewCatRow").style.display=""; catSel.value=curCatId||""; }
+    else{ $("#bNewCatRow").style.display="none"; }
+    syncColorFieldVisibility();
+  };
+  $("#bNewCatConfirm").onclick=()=>{
+    const name=$("#bNewCatName").value.trim();
+    if(!name){toast("ใส่ชื่อหมวดหมู่ก่อน");return;}
+    const cat={id:uid(),name,color:newCatColor};
+    state.categories=state.categories||[]; state.categories.push(cat);
+    state.categoriesUpdated=Date.now(); saveState(false);
+    const opt=document.createElement("option"); opt.value=cat.id; opt.textContent=cat.name;
+    catSel.insertBefore(opt,catSel.querySelector('option[value="__new__"]'));
+    catSel.value=cat.id;
+    $("#bNewCatRow").style.display="none"; syncColorFieldVisibility();
+    toast("เพิ่มหมวดหมู่ "+name+" แล้ว");
+  };
   $("#bSave").onclick=()=>{
     const title=$("#bTitle").value.trim();
     let st=$("#bStart").value, en=$("#bEnd").value;
     if(!st||!en){toast("ใส่เวลาเริ่มและจบให้ครบ");return;}
-    if(hmToMin(en)<=hmToMin(st)){ en=minToHM(Math.min(hmToMin(st)+30,24*60-1)); }
+    if(hmToMin(en)===hmToMin(st)){ en=minToHM((hmToMin(st)+30)%1440); }
+    const catId=(catSel.value&&catSel.value!=="__new__")?catSel.value:"";
+    const cat=catId?state.categories.find(c=>c.id===catId):null;
+    const finalColor=cat?cat.color:chosen;
+    const noteVal=$("#bNote").value.trim();
+    if(!id){
+      const rt=$("#bRecurToggle");
+      if(rt&&rt.checked){
+        if(recurDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
+        const tmpl={id:uid(),type:"block",title:title||"(ไม่มีชื่อ)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal,days:[...recurDays].sort(),skipDates:[],u:Date.now()};
+        state.recurring=state.recurring||[]; state.recurring.push(tmpl);
+        state.recurringUpdated=Date.now();
+        saveState(); closeModal(); renderSchedule();
+        toast("สร้างบล็อกทำซ้ำแล้ว");
+        return;
+      }
+    }
     const day=getDay(currentKey);
-    if(id){ const blk=day.blocks.find(x=>x.id===id); Object.assign(blk,{title,start:st,end:en,color:chosen,note:$("#bNote").value.trim()}); }
-    else{ day.blocks.push({id:uid(),title:title||"(ไม่มีชื่อ)",start:st,end:en,color:chosen,note:$("#bNote").value.trim()}); }
+    if(id){ const blk=day.blocks.find(x=>x.id===id); Object.assign(blk,{title,start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal}); }
+    else{ day.blocks.push({id:uid(),title:title||"(ไม่มีชื่อ)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal}); }
     saveState(); closeModal(); renderSchedule();
     toast(id?"แก้ไขบล็อกแล้ว":"เพิ่มบล็อกแล้ว");
   };
-  if(id){ $("#bDelete").onclick=()=>{ const day=getDay(currentKey); day.blocks=day.blocks.filter(x=>x.id!==id); saveState(); closeModal(); renderSchedule(); toast("ลบบล็อกแล้ว"); }; }
+  if(id){ $("#bDelete").onclick=()=>{
+    const dk=currentKey, day=getDay(dk), removed=day.blocks.find(x=>x.id===id);
+    day.blocks=day.blocks.filter(x=>x.id!==id);
+    saveState(); closeModal(); renderSchedule();
+    pushUndo(()=>{ const d=getDay(dk); d.blocks.push(removed); saveState(); if(currentKey===dk)renderSchedule(); });
+    toast("ลบบล็อกแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+  }; }
   setTimeout(()=>$("#bTitle").focus(),60);
 }
 
+/* ===================== recurring block edit (template) ===================== */
+function openRecurringBlockModal(recurringId,dayKeyAtRender){
+  const tmpl=(state.recurring||[]).find(t=>t.id===recurringId);
+  if(!tmpl){ toast("ไม่พบบล็อกทำซ้ำนี้ อาจถูกลบไปแล้ว"); renderSchedule(); return; }
+  const curCatId=tmpl.categoryId||"";
+  const sw=swatchesHtml(tmpl.color);
+  const catOptions=(state.categories||[]).map(c=>'<option value="'+c.id+'"'+(c.id===curCatId?" selected":"")+'>'+escapeHtml(c.name)+'</option>').join("");
+  const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip'+(tmpl.days.includes(i)?" sel":"")+'" data-d="'+i+'">'+d+'</button>').join("");
+  const dObj=dateFromKey(dayKeyAtRender);
+  const dayLabel=dObj.getDate()+" "+MON_SHORT[dObj.getMonth()];
+  openModal(`
+    <div class="modal-head"><h3>แก้ไขบล็อกทำซ้ำ</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="sync-status">แก้ไขที่นี่จะมีผลกับทุกวันในชุดนี้</div>
+      <div class="field"><label>ชื่อบล็อก</label><input type="text" id="rTitle" value="${escapeAttr(tmpl.title)}"></div>
+      <div class="row2">
+        <div class="field"><label>เริ่ม</label><input type="time" id="rStart" value="${tmpl.start}"></div>
+        <div class="field"><label>จบ</label><input type="time" id="rEnd" value="${tmpl.end}"></div>
+      </div>
+      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rDays">${dowChips}</div></div>
+      <div class="field"><label>หมวดหมู่ <span class="hint">(ไม่บังคับ)</span></label>
+        <select id="rCategory"><option value="">ไม่มีหมวดหมู่</option>${catOptions}</select></div>
+      <div class="field" id="rColorField" style="${curCatId?"display:none":""}"><label>สี</label><div class="swatches" id="rColors">${sw}</div></div>
+      <div class="field"><label>โน้ต <span class="hint">(ไม่บังคับ)</span></label>
+        <textarea id="rNote" rows="2">${tmpl.note?escapeHtml(tmpl.note):""}</textarea></div>
+      <div class="divider"></div>
+      <button class="btn sm" id="rSkipToday" style="width:100%">ลบเฉพาะวันที่ ${dayLabel}</button>
+    </div>
+    <div class="modal-foot">
+      <button class="btn danger sm spacer" id="rDeleteAll">ลบทั้งชุด</button>
+      <button class="btn primary" id="rSave">บันทึก</button>
+    </div>
+  `);
+  let chosen=tmpl.color;
+  $$("#rColors .swatch").forEach(s=>s.onclick=()=>{chosen=s.dataset.c; $$("#rColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
+  const catSel=$("#rCategory");
+  function syncColorVis(){ $("#rColorField").style.display=catSel.value?"none":""; }
+  catSel.onchange=syncColorVis;
+  let selDays=new Set(tmpl.days);
+  $$("#rDays .dow-chip").forEach(ch=>ch.onclick=()=>{
+    const d=+ch.dataset.d;
+    if(selDays.has(d)){selDays.delete(d);ch.classList.remove("sel");}
+    else{selDays.add(d);ch.classList.add("sel");}
+  });
+  $("#rSave").onclick=()=>{
+    const title=$("#rTitle").value.trim();
+    let st=$("#rStart").value, en=$("#rEnd").value;
+    if(!st||!en){toast("ใส่เวลาเริ่มและจบให้ครบ");return;}
+    if(hmToMin(en)===hmToMin(st)){ en=minToHM((hmToMin(st)+30)%1440); }
+    if(selDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
+    const catId=catSel.value||"";
+    const cat=catId?state.categories.find(c=>c.id===catId):null;
+    Object.assign(tmpl,{title:title||"(ไม่มีชื่อ)",start:st,end:en,color:cat?cat.color:chosen,categoryId:catId||null,note:$("#rNote").value.trim(),days:[...selDays].sort(),u:Date.now()});
+    state.recurringUpdated=Date.now();
+    saveState(); closeModal(); renderSchedule();
+    toast("แก้ไขชุดทำซ้ำแล้ว");
+  };
+  $("#rSkipToday").onclick=()=>{
+    tmpl.skipDates=tmpl.skipDates||[];
+    if(!tmpl.skipDates.includes(dayKeyAtRender)) tmpl.skipDates.push(dayKeyAtRender);
+    tmpl.u=Date.now(); state.recurringUpdated=Date.now();
+    saveState(); closeModal(); renderSchedule();
+    pushUndo(()=>{ tmpl.skipDates=(tmpl.skipDates||[]).filter(d=>d!==dayKeyAtRender); tmpl.u=Date.now(); state.recurringUpdated=Date.now(); saveState(); renderSchedule(); });
+    toast("ข้ามวันนี้แล้ว วันอื่นไม่กระทบ","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+  };
+  $("#rDeleteAll").onclick=()=>{
+    if(!confirm('ลบบล็อกทำซ้ำ "'+tmpl.title+'" ทั้งชุด? จะหายจากทุกวัน')) return;
+    const removed=tmpl;
+    state.recurring=state.recurring.filter(t=>t.id!==tmpl.id);
+    state.recurringUpdated=Date.now();
+    saveState(); closeModal(); renderSchedule();
+    pushUndo(()=>{ state.recurring=state.recurring||[]; state.recurring.push(removed); state.recurringUpdated=Date.now(); saveState(); renderSchedule(); });
+    toast("ลบชุดทำซ้ำแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+  };
+}
+
+/* ===================== weekly graph ===================== */
+function weekCategoryData(weekStart){
+  const days=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(weekStart); d.setDate(weekStart.getDate()+i);
+    const key=keyFromDate(d);
+    const dd=state.days[key];
+    const byCat={}; let total=0;
+    if(dd&&dd.blocks){
+      for(const b of dd.blocks){
+        const s=hmToMin(b.start), e=hmToMin(b.end);
+        const dur=e<=s?(e+1440-s):(e-s);
+        const cid=b.categoryId&&catById(b.categoryId)?b.categoryId:"_none";
+        byCat[cid]=(byCat[cid]||0)+dur; total+=dur;
+      }
+    }
+    days.push({key,date:d,byCat,total});
+  }
+  return days;
+}
+function fmtHM(m){ const h=Math.floor(m/60), mm=Math.round(m%60); if(h<=0)return mm+"น."; return h+"ชม."+(mm>0?" "+mm+"น.":""); }
+function renderGraphBars(days){
+  const trackH=140;
+  const maxTotal=Math.max(1,...days.map(d=>d.total));
+  const catOrder=[...(state.categories||[]).map(c=>c.id),"_none"];
+  const tk=todayKey();
+  return days.map(d=>{
+    const barH=d.total>0?Math.max(3,(d.total/maxTotal)*trackH):0;
+    let segs="";
+    if(d.total>0){
+      for(const cid of catOrder){
+        const dur=d.byCat[cid]; if(!dur)continue;
+        const segH=(dur/d.total)*barH;
+        const cat=cid==="_none"?null:catById(cid);
+        const color=cat?cat.color:"var(--ink-faint)";
+        const nm=cat?cat.name:"ไม่มีหมวดหมู่";
+        segs+='<div class="gbar-seg" style="height:'+segH+'px;background:'+color+'" title="'+escapeAttr(nm)+' '+fmtHM(dur)+'"></div>';
+      }
+    }
+    const isToday=d.key===tk;
+    return '<div class="gbar-col"><div class="gbar-track"><div class="gbar-fill" style="height:'+barH+'px">'+segs+'</div></div><span class="gbar-lbl'+(isToday?" today":"")+'">'+DOW_SHORT[d.date.getDay()]+' '+d.date.getDate()+'</span></div>';
+  }).join("");
+}
+function renderGraphLegend(days){
+  const totals={}; let grand=0;
+  for(const d of days){ for(const cid in d.byCat){ totals[cid]=(totals[cid]||0)+d.byCat[cid]; grand+=d.byCat[cid]; } }
+  const catOrder=[...(state.categories||[]).map(c=>c.id),"_none"];
+  let html="";
+  for(const cid of catOrder){
+    const m=totals[cid]; if(!m)continue;
+    const cat=cid==="_none"?null:catById(cid);
+    const nm=cat?escapeHtml(cat.name):"ไม่มีหมวดหมู่";
+    const color=cat?cat.color:"var(--ink-faint)";
+    html+='<div class="glegend-row"><span class="glegend-dot" style="background:'+color+'"></span><span class="glegend-name">'+nm+'</span><span class="glegend-val">'+fmtHM(m)+'</span></div>';
+  }
+  if(!html) html='<div class="list-empty">ยังไม่มีข้อมูลสัปดาห์นี้</div>';
+  return {html,grandLabel:grand>0?("รวม "+fmtHM(grand)):"ยังไม่มีข้อมูลสัปดาห์นี้"};
+}
+let graphWeekStart=null;
+function renderGraphModalContent(){
+  const days=weekCategoryData(graphWeekStart);
+  const {html:legendHtml,grandLabel}=renderGraphLegend(days);
+  const barsHtml=renderGraphBars(days);
+  const endW=new Date(graphWeekStart); endW.setDate(graphWeekStart.getDate()+6);
+  const label=graphWeekStart.getDate()+" "+MON_SHORT[graphWeekStart.getMonth()]+" – "+endW.getDate()+" "+MON_SHORT[endW.getMonth()]+" "+endW.getFullYear();
+  openModal(`
+    <div class="modal-head"><h3>สรุปเวลารายสัปดาห์</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="graph-nav">
+        <button class="nav-arrow" id="gwPrev" aria-label="สัปดาห์ก่อน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="graph-wlabel">${label}</span>
+        <button class="nav-arrow" id="gwNext" aria-label="สัปดาห์ถัดไป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="graph-bars">${barsHtml}</div>
+      <div class="graph-total">${grandLabel}</div>
+      <div class="graph-legend">${legendHtml}</div>
+    </div>
+    <div class="modal-foot"><button class="btn sm" id="manageCatBtn">จัดการหมวดหมู่</button><button class="btn primary" data-close>ปิด</button></div>
+  `);
+  $("#gwPrev").onclick=()=>{ graphWeekStart.setDate(graphWeekStart.getDate()-7); renderGraphModalContent(); };
+  $("#gwNext").onclick=()=>{ graphWeekStart.setDate(graphWeekStart.getDate()+7); renderGraphModalContent(); };
+  $("#manageCatBtn").onclick=()=>openCategoryManageModal();
+}
+$("#graphBtn").onclick=()=>{
+  const d=dateFromKey(currentKey);
+  graphWeekStart=new Date(d); graphWeekStart.setDate(d.getDate()-d.getDay());
+  renderGraphModalContent();
+};
+
+/* ===================== category management ===================== */
+function renderCatListHtml(){
+  if(!(state.categories||[]).length) return '<div class="list-empty">ยังไม่มีหมวดหมู่ — เพิ่มด้านล่างได้เลย</div>';
+  return state.categories.map(c=>
+    '<div class="cat-row" data-id="'+c.id+'">'+
+      '<span class="cat-dot" style="background:'+c.color+'"></span>'+
+      '<input type="text" class="cat-name-input" value="'+escapeAttr(c.name)+'">'+
+      '<button type="button" class="cat-recolor" style="background:'+c.color+'" aria-label="เปลี่ยนสี"></button>'+
+      '<button type="button" class="cat-del" aria-label="ลบหมวดหมู่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
+    '</div>'
+  ).join("");
+}
+function bindCatListEvents(){
+  $$(".cat-row").forEach(row=>{
+    const id=row.dataset.id, cat=state.categories.find(c=>c.id===id);
+    if(!cat)return;
+    $(".cat-name-input",row).addEventListener("blur",e=>{
+      const v=e.target.value.trim();
+      if(v&&v!==cat.name){ cat.name=v; state.categoriesUpdated=Date.now(); saveState(false); }
+      else e.target.value=cat.name;
+    });
+    $(".cat-name-input",row).addEventListener("keydown",e=>{ if(e.key==="Enter")e.target.blur(); });
+    $(".cat-recolor",row).onclick=()=>{
+      const idx=COLORS.findIndex(c=>c.h===cat.color);
+      const next=COLORS[(idx+1+COLORS.length)%COLORS.length].h;
+      cat.color=next; state.categoriesUpdated=Date.now(); saveState(false);
+      row.querySelector(".cat-dot").style.background=next;
+      row.querySelector(".cat-recolor").style.background=next;
+    };
+    $(".cat-del",row).onclick=()=>{
+      if(!confirm('ลบหมวดหมู่ "'+cat.name+'"? บล็อกที่เคยตั้งไว้จะไม่ถูกลบ แค่จะไม่มีหมวดหมู่ต่อไป')) return;
+      state.categories=state.categories.filter(c=>c.id!==id);
+      state.categoriesUpdated=Date.now(); saveState(false);
+      $("#catList").innerHTML=renderCatListHtml();
+      bindCatListEvents();
+      toast("ลบหมวดหมู่แล้ว");
+    };
+  });
+}
+function openCategoryManageModal(){
+  openModal(`
+    <div class="modal-head"><h3>จัดการหมวดหมู่</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div id="catList">${renderCatListHtml()}</div>
+      <div class="divider"></div>
+      <div class="field"><label>เพิ่มหมวดหมู่ใหม่</label>
+        <input type="text" id="newCatName" placeholder="เช่น ACD, อาร์ต, แอดมิน">
+        <div class="swatches" id="newCatColors" style="margin-top:8px">${swatchesHtml(COLORS[0].h)}</div>
+      </div>
+      <button class="btn primary sm" id="addCatBtn" style="width:100%">+ เพิ่มหมวดหมู่</button>
+    </div>
+    <div class="modal-foot"><button class="btn" id="backToGraphBtn">← กลับไปดูกราฟ</button></div>
+  `);
+  let newColor=COLORS[0].h;
+  $$("#newCatColors .swatch").forEach(s=>s.onclick=()=>{newColor=s.dataset.c; $$("#newCatColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
+  $("#addCatBtn").onclick=()=>{
+    const name=$("#newCatName").value.trim();
+    if(!name){toast("ใส่ชื่อหมวดหมู่ก่อน");return;}
+    state.categories=state.categories||[]; state.categories.push({id:uid(),name,color:newColor});
+    state.categoriesUpdated=Date.now(); saveState(false);
+    openCategoryManageModal();
+    toast("เพิ่มหมวดหมู่แล้ว");
+  };
+  bindCatListEvents();
+  $("#backToGraphBtn").onclick=()=>{ $("#graphBtn").click(); };
+}
+
 /* ===================== tasks ===================== */
+function materializeRecurringTasksForDay(key){
+  const dObj=dateFromKey(key), dow=dObj.getDay();
+  const day=getDay(key);
+  let changed=false;
+  for(const t of (state.recurring||[])){
+    if(t.type!=="task")continue;
+    if(!t.days||!t.days.includes(dow))continue;
+    t.materializedDates=t.materializedDates||[];
+    if(t.materializedDates.includes(key))continue;
+    day.tasks.push({id:uid(),text:t.title,done:false,flag:false,recurringId:t.id});
+    t.materializedDates.push(key);
+    changed=true;
+  }
+  if(changed){ state.recurringUpdated=Date.now(); saveState(false); }
+  return changed;
+}
+/* ---- carry-over pending tasks from previous days ---- */
+function getPendingCarryoverTasks(){
+  const tk=todayKey(), out=[];
+  const keys=Object.keys(state.days).filter(k=>k<tk).sort();
+  for(const k of keys){
+    const d=state.days[k]; if(!d||!d.tasks)continue;
+    for(const t of d.tasks){
+      if(t.done||t.recurringId)continue; // งานทำซ้ำมีของตัวเองอยู่แล้ว ไม่ต้องย้าย
+      out.push({dayKey:k,taskId:t.id});
+    }
+  }
+  return out;
+}
+function updateCarryoverBar(){
+  const bar=$("#carryoverBar"); if(!bar)return;
+  if(currentKey!==todayKey()){ bar.style.display="none"; return; }
+  const pending=getPendingCarryoverTasks();
+  if(pending.length===0){ bar.style.display="none"; return; }
+  bar.style.display="";
+  $("#carryoverText").textContent="มีงานค้าง "+pending.length+" ชิ้นจากวันก่อนหน้า";
+}
+function carryOverPendingTasks(){
+  const pending=getPendingCarryoverTasks();
+  if(pending.length===0)return;
+  const today=getDay(todayKey());
+  const now=Date.now();
+  const snapshot=[];
+  for(const p of pending){
+    const d=state.days[p.dayKey]; if(!d)continue;
+    const idx=d.tasks.findIndex(x=>x.id===p.taskId); if(idx<0)continue;
+    const [task]=d.tasks.splice(idx,1);
+    snapshot.push({dayKey:p.dayKey,task});
+    today.tasks.push(task);
+    d.u=now;
+  }
+  if(snapshot.length===0)return;
+  saveState(true);
+  renderTasks();
+  pushUndo(()=>{
+    const now2=Date.now(), t2=getDay(todayKey());
+    for(const s of snapshot){
+      t2.tasks=t2.tasks.filter(x=>x.id!==s.task.id);
+      const d=getDay(s.dayKey); d.tasks.push(s.task); d.u=now2;
+    }
+    saveState(true); renderTasks();
+  });
+  toast(snapshot.length+" งานค้างย้ายมาวันนี้แล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+}
+$("#carryoverBtn").onclick=carryOverPendingTasks;
 function renderTasks(){
+  materializeRecurringTasksForDay(currentKey);
+  updateCarryoverBar();
   const day=getDay(currentKey);
   const list=$("#taskList"); list.innerHTML="";
   const done=day.tasks.filter(t=>t.done).length;
@@ -693,16 +1216,25 @@ function renderTasks(){
     const li=document.createElement("li");
     li.className="task"+(t.done?" done":"")+(t.flag?" flag":"");
     li.dataset.id=t.id;
+    const recBadge=t.recurringId?'<button type="button" class="t-rec-icon" aria-label="จัดการงานทำซ้ำ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>':"";
     li.innerHTML=`
       <span class="grip" aria-label="ลากเพื่อจัดลำดับ"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg></span>
       <button class="check" aria-label="ทำเสร็จ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
       <span class="t-label" role="textbox" tabindex="0">${escapeHtml(t.text)}</span>
+      ${recBadge}
       <button class="flag-btn" aria-label="ทำเครื่องหมายสำคัญ"><svg viewBox="0 0 24 24" fill="${t.flag?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2.5 4L17 12H4"/></svg></button>
       <button class="t-del" aria-label="ลบงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>`;
     const t_id=t.id;
     $(".check",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.done=!x.done;saveState();renderTasks();};
     $(".flag-btn",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.flag=!x.flag;saveState();renderTasks();};
-    $(".t-del",li).onclick=()=>{day.tasks=day.tasks.filter(z=>z.id!==t_id);saveState();renderTasks();toast("ลบงานแล้ว");};
+    if(t.recurringId){ const ri=$(".t-rec-icon",li); if(ri) ri.onclick=ev=>{ev.stopPropagation(); openRecurringTaskManageModal(t.recurringId);}; }
+    $(".t-del",li).onclick=()=>{
+      const dk=currentKey, idx=day.tasks.findIndex(z=>z.id===t_id), removed=day.tasks[idx];
+      day.tasks=day.tasks.filter(z=>z.id!==t_id);
+      saveState();renderTasks();
+      pushUndo(()=>{ const d=getDay(dk); d.tasks.splice(Math.min(idx,d.tasks.length),0,removed); saveState(); if(currentKey===dk)renderTasks(); });
+      toast("ลบงานแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    };
     // inline edit
     const lbl=$(".t-label",li);
     lbl.onclick=()=>{ if(lbl.isContentEditable)return; lbl.contentEditable="true"; lbl.focus(); placeCaretEnd(lbl); };
@@ -720,6 +1252,82 @@ function addTask(){
 }
 $("#taskAddBtn").onclick=addTask;
 $("#taskInput").addEventListener("keydown",e=>{if(e.key==="Enter")addTask();});
+
+/* ---- recurring tasks ---- */
+function openRecurringTaskModal(){
+  const prefill=$("#taskInput").value.trim();
+  const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip" data-d="'+i+'">'+d+'</button>').join("");
+  openModal(`
+    <div class="modal-head"><h3>เพิ่มงานทำซ้ำ</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label>ชื่องาน</label><input type="text" id="rtTitle" placeholder="เช่น เช็คอีเมล" value="${escapeAttr(prefill)}"></div>
+      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rtDays">${dowChips}</div></div>
+    </div>
+    <div class="modal-foot"><button class="btn primary" id="rtSave" style="width:100%">สร้างงานทำซ้ำ</button></div>
+  `);
+  let selDays=new Set();
+  $$("#rtDays .dow-chip").forEach(ch=>ch.onclick=()=>{
+    const d=+ch.dataset.d;
+    if(selDays.has(d)){selDays.delete(d);ch.classList.remove("sel");}
+    else{selDays.add(d);ch.classList.add("sel");}
+  });
+  $("#rtSave").onclick=()=>{
+    const title=$("#rtTitle").value.trim();
+    if(!title){toast("ใส่ชื่องานก่อน");return;}
+    if(selDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
+    const tmpl={id:uid(),type:"task",title,days:[...selDays].sort(),materializedDates:[],u:Date.now()};
+    state.recurring=state.recurring||[]; state.recurring.push(tmpl);
+    state.recurringUpdated=Date.now();
+    saveState(); closeModal();
+    $("#taskInput").value="";
+    renderTasks();
+    toast("สร้างงานทำซ้ำแล้ว");
+  };
+}
+$("#taskRecurBtn").onclick=openRecurringTaskModal;
+function openRecurringTaskManageModal(recurringId){
+  const tmpl=(state.recurring||[]).find(t=>t.id===recurringId);
+  if(!tmpl){ toast("ไม่พบงานทำซ้ำนี้ อาจถูกลบไปแล้ว"); return; }
+  const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip'+(tmpl.days.includes(i)?" sel":"")+'" data-d="'+i+'">'+d+'</button>').join("");
+  openModal(`
+    <div class="modal-head"><h3>งานทำซ้ำ</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="sync-status">แก้ไขนี้มีผลกับทุกวันในชุด · งานที่เพิ่มไปแล้วในแต่ละวันจะไม่เปลี่ยน</div>
+      <div class="field"><label>ชื่องาน</label><input type="text" id="rtmTitle" value="${escapeAttr(tmpl.title)}"></div>
+      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rtmDays">${dowChips}</div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn danger sm spacer" id="rtmDeleteAll">ลบทั้งชุด</button>
+      <button class="btn primary" id="rtmSave">บันทึก</button>
+    </div>
+  `);
+  let selDays=new Set(tmpl.days);
+  $$("#rtmDays .dow-chip").forEach(ch=>ch.onclick=()=>{
+    const d=+ch.dataset.d;
+    if(selDays.has(d)){selDays.delete(d);ch.classList.remove("sel");}
+    else{selDays.add(d);ch.classList.add("sel");}
+  });
+  $("#rtmSave").onclick=()=>{
+    const title=$("#rtmTitle").value.trim();
+    if(!title){toast("ใส่ชื่องานก่อน");return;}
+    if(selDays.size===0){toast("เลือกวันอย่างน้อย 1 วัน");return;}
+    tmpl.title=title; tmpl.days=[...selDays].sort(); tmpl.u=Date.now();
+    state.recurringUpdated=Date.now();
+    saveState(); closeModal(); renderTasks();
+    toast("แก้ไขงานทำซ้ำแล้ว");
+  };
+  $("#rtmDeleteAll").onclick=()=>{
+    if(!confirm('ลบงานทำซ้ำ "'+tmpl.title+'" ทั้งชุด? งานที่เพิ่มไปแล้วในแต่ละวันจะไม่ถูกลบ แต่จะไม่เพิ่มใหม่อีก')) return;
+    const removed=tmpl;
+    state.recurring=state.recurring.filter(t=>t.id!==tmpl.id);
+    state.recurringUpdated=Date.now();
+    saveState(); closeModal(); renderTasks();
+    pushUndo(()=>{ state.recurring=state.recurring||[]; state.recurring.push(removed); state.recurringUpdated=Date.now(); saveState(); });
+    toast("ลบงานทำซ้ำแล้ว (งานเก่ายังอยู่)","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+  };
+}
 
 /* drag reorder (pointer-based, touch-safe via touch-action:none on handle) */
 let drag=null;
@@ -803,6 +1411,7 @@ document.addEventListener("click",e=>{ if(!e.target.closest(".menu-anchor"))menu
 $("#mExport").onclick=()=>{menu.classList.remove("open");exportJSON();};
 $("#mImport").onclick=()=>{menu.classList.remove("open");$("#fileInput").click();};
 $("#mSync").onclick=()=>{menu.classList.remove("open");openSyncModal();};
+$("#mTemplates").onclick=()=>{menu.classList.remove("open");openTemplateModal();};
 $("#mHelp").onclick=()=>{menu.classList.remove("open");openHelp();};
 $("#syncBtn").onclick=()=>openSyncModal();
 
@@ -875,7 +1484,7 @@ async function buildPayload(){
     if(empty && d.u==null) continue;
     days[k]=d;
   }
-  const obj={days,lastModified:state.lastModified,_v:2};
+  const obj={days,categories:state.categories||[],categoriesUpdated:state.categoriesUpdated||0,recurring:state.recurring||[],recurringUpdated:state.recurringUpdated||0,templates:state.templates||[],templatesUpdated:state.templatesUpdated||0,lastModified:state.lastModified,_v:5};
   let content=JSON.stringify(obj);
   if(gcfg().pass){ if(!cryptoOk)throw new Error("เบราว์เซอร์นี้เข้ารหัสไม่ได้"); content=await encryptStr(content,gcfg().pass); }
   return content;
@@ -894,6 +1503,27 @@ function mergeDays(remoteDays){
   }
   return changed;
 }
+/* merge หมวดหมู่: ทั้งชุดเทียบเวลาแก้ล่าสุด ฝั่งใหม่กว่าชนะทั้งชุด (รายการเล็ก แก้ไม่บ่อย ไม่ต้อง merge รายรายการ) */
+function mergeCategories(remoteCats,remoteUpdated){
+  if(remoteCats && (remoteUpdated||0)>(state.categoriesUpdated||0)){
+    state.categories=remoteCats; state.categoriesUpdated=remoteUpdated||0; return true;
+  }
+  return false;
+}
+/* merge บล็อก/งานทำซ้ำ: หลักการเดียวกับหมวดหมู่ — ทั้งชุด last-write-wins */
+function mergeRecurring(remoteRec,remoteUpdated){
+  if(remoteRec && (remoteUpdated||0)>(state.recurringUpdated||0)){
+    state.recurring=remoteRec; state.recurringUpdated=remoteUpdated||0; return true;
+  }
+  return false;
+}
+/* merge เทมเพลต: หลักการเดียวกัน — ทั้งชุด last-write-wins */
+function mergeTemplates(remoteTpl,remoteUpdated){
+  if(remoteTpl && (remoteUpdated||0)>(state.templatesUpdated||0)){
+    state.templates=remoteTpl; state.templatesUpdated=remoteUpdated||0; return true;
+  }
+  return false;
+}
 function setSyncDot(s){ const d=$("#syncDot"); if(d) d.className="sync-dot "+s; }
 function setSyncStatus(msg,cls){ const e=$("#syncStatus"); if(e){e.textContent=msg; e.className="sync-status"+(cls?" "+cls:"");} }
 function updateSyncTitle(st){ const b=$("#syncBtn"); if(!b)return; b.title = st==="pending"?"มีการเปลี่ยนแปลงที่ยังไม่ซิงค์" : st==="busy"?"กำลังซิงค์..." : st==="err"?"ซิงค์มีปัญหา — แตะเพื่อลองใหม่" : "ซิงค์ข้อมูล"; }
@@ -905,9 +1535,12 @@ function makeSyncCode(){
   return "DPSYNC1:"+b64(new TextEncoder().encode(json));
 }
 function applySyncCode(code){
-  code=(code||"").trim();
-  if(!code.startsWith("DPSYNC1:"))throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
-  const o=JSON.parse(new TextDecoder().decode(unb64(code.slice(8))));
+  code=(code||"").trim().replace(/^["']|["']$/g,"");
+  const idx=code.search(/DPSYNC1:/i);
+  if(idx<0)throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
+  let payload=code.slice(idx+8).replace(/\s+/g,"").replace(/[^A-Za-z0-9+/=].*$/,"");
+  if(!payload)throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
+  const o=JSON.parse(new TextDecoder().decode(unb64(payload)));
   const c=gcfg(); c.token=o.t||""; c.gistId=o.g||""; c.pass=o.p||""; saveState(false);
 }
 async function copyText(txt){
@@ -935,6 +1568,9 @@ async function syncNow(silent){
       if(file.truncated&&file.raw_url) content=await (await fetch(file.raw_url)).text();
       const remote=await parsePayload(content);
       if(remote&&remote.days) remoteChanged=mergeDays(remote.days);
+      if(remote&&mergeCategories(remote.categories,remote.categoriesUpdated)) remoteChanged=true;
+      if(remote&&mergeRecurring(remote.recurring,remote.recurringUpdated)) remoteChanged=true;
+      if(remote&&mergeTemplates(remote.templates,remote.templatesUpdated)) remoteChanged=true;
     }
     if(remoteChanged){ saveState(false); renderAll(); }
     const content=await buildPayload();
@@ -1005,13 +1641,13 @@ function openSyncModal(){
       <div class="sync-status" id="syncStatus">${configured?"เชื่อมต่อแล้ว · ซิงค์อัตโนมัติเมื่อแก้ไขและตอนเปิด/สลับแอป":"ตั้งครั้งแรก: ใส่ token แล้วกด ‘สร้าง Gist ใหม่’ — หรือวาง Sync Code จากเครื่องอื่น"}</div>
 
       <div class="field"><label>วาง Sync Code จากเครื่องอื่น <span class="hint">(ย้ายเครื่องในขั้นตอนเดียว)</span></label>
-        <div style="display:flex;gap:8px"><input type="text" id="codeInput" style="flex:1;min-width:0" placeholder="DPSYNC1:..." autocomplete="off"><button class="btn sm" id="codeApply">ใช้โค้ด</button></div></div>
+        <div style="display:flex;gap:8px"><input type="text" id="codeInput" style="flex:1;min-width:0" placeholder="DPSYNC1:..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn sm" id="codeApply">ใช้โค้ด</button></div></div>
       <div class="divider"></div>
 
       <div class="field"><label>GitHub Token <span class="hint">(scope: gist เท่านั้น)</span></label>
         <input type="password" id="gToken" placeholder="ghp_... หรือ github_pat_..." value="${escapeAttr(c.token||"")}"></div>
       <div class="field"><label>Gist ID</label>
-        <input type="text" id="gGistId" placeholder="มีอยู่แล้ววางที่นี่ หรือกดสร้างใหม่" value="${escapeAttr(c.gistId||"")}"></div>
+        <input type="text" id="gGistId" placeholder="มีอยู่แล้ววางที่นี่ หรือกดสร้างใหม่" value="${escapeAttr(c.gistId||"")}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
       <div class="field"><label>Passphrase เข้ารหัส <span class="hint">(เว้นว่าง = ไม่เข้ารหัส)</span></label>
         <input type="password" id="gPass" placeholder="${cryptoOk?'รหัสลับสำหรับเข้ารหัสข้อมูล':'เบราว์เซอร์นี้เข้ารหัสไม่ได้'}" value="${escapeAttr(c.pass||"")}" ${cryptoOk?"":"disabled"}>
         <span class="hint">ใส่ค่าเดียวกันทุกเครื่องจึงจะอ่านกันได้</span></div>
@@ -1041,6 +1677,80 @@ function openSyncModal(){
 function updateSyncDotIdle(){ const c=gcfg(); setSyncDot(c.token&&c.gistId?"ok":"off"); updateSyncTitle("ok"); }
 
 /* ===================== help ===================== */
+/* ===================== day templates ===================== */
+function renderTplListHtml(){
+  if(!(state.templates||[]).length) return '<div class="list-empty">ยังไม่มีเทมเพลต — บันทึกจากด้านล่างได้เลย</div>';
+  return state.templates.map(t=>
+    '<div class="tpl-row" data-id="'+t.id+'">'+
+      '<div class="tpl-info"><input type="text" class="tpl-name-input" value="'+escapeAttr(t.name)+'"><span class="tpl-meta">'+t.blocks.length+' บล็อก</span></div>'+
+      '<button type="button" class="btn sm tpl-apply">ใช้กับวันนี้</button>'+
+      '<button type="button" class="tpl-del" aria-label="ลบเทมเพลต"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
+    '</div>'
+  ).join("");
+}
+function bindTplListEvents(){
+  $$(".tpl-row").forEach(row=>{
+    const id=row.dataset.id, tpl=(state.templates||[]).find(t=>t.id===id);
+    if(!tpl)return;
+    $(".tpl-name-input",row).addEventListener("blur",e=>{
+      const v=e.target.value.trim();
+      if(v&&v!==tpl.name){ tpl.name=v; tpl.u=Date.now(); state.templatesUpdated=Date.now(); saveState(false); }
+      else e.target.value=tpl.name;
+    });
+    $(".tpl-name-input",row).addEventListener("keydown",e=>{ if(e.key==="Enter")e.target.blur(); });
+    $(".tpl-apply",row).onclick=()=>{
+      const day=getDay(currentKey);
+      const clones=tpl.blocks.map(b=>({id:uid(),title:b.title,start:b.start,end:b.end,color:b.color,categoryId:b.categoryId||null,note:b.note||""}));
+      day.blocks.push(...clones);
+      saveState(); closeModal(); renderSchedule();
+      toast('เพิ่ม "'+tpl.name+'" ('+clones.length+' บล็อก) เข้าวันนี้แล้ว');
+    };
+    $(".tpl-del",row).onclick=()=>{
+      if(!confirm('ลบเทมเพลต "'+tpl.name+'"?')) return;
+      const removed=tpl;
+      state.templates=state.templates.filter(t=>t.id!==id);
+      state.templatesUpdated=Date.now(); saveState(false);
+      $("#tplList").innerHTML=renderTplListHtml();
+      bindTplListEvents();
+      pushUndo(()=>{ state.templates=state.templates||[]; state.templates.push(removed); state.templatesUpdated=Date.now(); saveState(false); });
+      toast("ลบเทมเพลตแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    };
+  });
+}
+function openTemplateModal(){
+  const dObj=dateFromKey(currentKey);
+  const dayLabel=dObj.getDate()+" "+MON_SHORT[dObj.getMonth()]+" "+dObj.getFullYear();
+  openModal(`
+    <div class="modal-head"><h3>เทมเพลตตาราง</h3>
+      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="sync-status">"ใช้กับวันนี้" หมายถึงวันที่กำลังดูอยู่ (${dayLabel}) — จะเพิ่มบล็อกเข้าไป ไม่ลบของเดิม</div>
+      <div id="tplList">${renderTplListHtml()}</div>
+      <div class="divider"></div>
+      <div class="field"><label>บันทึกวันนี้เป็นเทมเพลตใหม่</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="newTplName" placeholder="ตั้งชื่อเทมเพลต" style="flex:1;min-width:0">
+          <button class="btn sm primary" id="saveTplBtn">บันทึก</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn primary" data-close>เสร็จ</button></div>
+  `);
+  bindTplListEvents();
+  $("#saveTplBtn").onclick=()=>{
+    const name=$("#newTplName").value.trim();
+    if(!name){toast("ตั้งชื่อเทมเพลตก่อน");return;}
+    const day=getDay(currentKey);
+    if(!day.blocks.length){toast("วันนี้ยังไม่มีบล็อกให้บันทึกเป็นเทมเพลต");return;}
+    const snap=day.blocks.map(b=>({title:b.title,start:b.start,end:b.end,color:b.color,categoryId:b.categoryId||null,note:b.note||""}));
+    const tpl={id:uid(),name,blocks:snap,createdAt:Date.now(),u:Date.now()};
+    state.templates=state.templates||[]; state.templates.push(tpl);
+    state.templatesUpdated=Date.now(); saveState(false);
+    openTemplateModal();
+    toast("บันทึกเทมเพลตแล้ว");
+  };
+}
+
 function openHelp(){
   openModal(`
     <div class="modal-head"><h3>วิธีใช้</h3>
@@ -1071,10 +1781,24 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.
 function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function escapeAttr(s){return escapeHtml(s).replace(/'/g,"&#39;");}
 function placeCaretEnd(el){const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r);}
-function toast(msg){
-  const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+/* ===================== undo ===================== */
+let lastUndo=null, undoTimer=null;
+function pushUndo(restoreFn){
+  lastUndo={restoreFn};
+  clearTimeout(undoTimer);
+  undoTimer=setTimeout(()=>{lastUndo=null;},5000);
+}
+function toast(msg,actionLabel,actionFn){
+  const t=document.createElement("div"); t.className="toast";
+  const span=document.createElement("span"); span.textContent=msg; t.appendChild(span);
+  if(actionLabel&&actionFn){
+    const b=document.createElement("button"); b.type="button"; b.className="toast-action"; b.textContent=actionLabel;
+    b.onclick=()=>{ actionFn(); dismiss(); };
+    t.appendChild(b);
+  }
   $("#toasts").appendChild(t);
-  setTimeout(()=>{t.style.transition="opacity .3s";t.style.opacity="0";setTimeout(()=>t.remove(),300);},2200);
+  const dismiss=()=>{ clearTimeout(hideTimer); t.style.transition="opacity .3s"; t.style.opacity="0"; setTimeout(()=>t.remove(),300); };
+  const hideTimer=setTimeout(dismiss,actionLabel?5000:2200);
 }
 $("#addBlock").onclick=()=>openBlockModal(null,540);
 
