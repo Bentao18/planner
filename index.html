@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -100,7 +100,7 @@ input,textarea,select{font-family:inherit; color:inherit}
 .curdate{display:flex; flex-direction:column; min-width:188px; padding:0 6px}
 .curdate .dow{font-family:var(--display); font-weight:600; font-size:19px; line-height:1.15; letter-spacing:-.01em}
 .curdate .dnum{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); letter-spacing:.03em}
-.curdate.is-today .dow::after{content:"วันนี้"; font-family:var(--sans); font-size:10px; font-weight:600; color:var(--primary-ink); background:var(--primary); padding:2px 7px; border-radius:20px; margin-left:9px; vertical-align:middle; letter-spacing:0}
+.curdate.is-today .dow::after{content:"Today"; font-family:var(--sans); font-size:10px; font-weight:600; color:var(--primary-ink); background:var(--primary); padding:2px 7px; border-radius:20px; margin-left:9px; vertical-align:middle; letter-spacing:0}
 .today-btn{
   font-size:13px; font-weight:500; padding:7px 13px; border-radius:9px;
   background:var(--surface); border:1px solid var(--line); color:var(--ink-soft);
@@ -161,7 +161,7 @@ input,textarea,select{font-family:inherit; color:inherit}
 .now-line{position:absolute; left:calc(-1 * var(--gut) + 6px); right:4px; height:0; border-top:1.5px dashed var(--danger); z-index:5; pointer-events:none}
 .now-line .nlbl{position:absolute; left:-1px; top:-7px; transform:translateX(-100%); padding-right:6px; font-family:var(--mono); font-size:9.5px; color:var(--danger); font-weight:600}
 .block{
-  position:absolute; border-radius:8px; padding:5px 8px; overflow:hidden; cursor:grab; touch-action:none;
+  position:absolute; border-radius:8px; padding:5px 8px; overflow:hidden; cursor:grab; touch-action:pan-y;
   background:color-mix(in srgb, var(--c) 20%, var(--raised));
   border:1px solid color-mix(in srgb, var(--c) 42%, var(--line));
   border-left:3px solid var(--c);
@@ -170,8 +170,8 @@ input,textarea,select{font-family:inherit; color:inherit}
 .block:hover{filter:brightness(1.04); z-index:6}
 .block:active{transform:scale(.992); cursor:grabbing}
 .block.dragging-block{z-index:30 !important; filter:brightness(1.1); box-shadow:var(--shadow-pop); transition:none; cursor:grabbing}
-.b-resize{position:absolute; left:0; right:0; height:9px; cursor:ns-resize; touch-action:none; z-index:4}
-.b-resize-top{top:-3px} .b-resize-bot{bottom:-3px}
+.b-resize{position:absolute; left:0; right:0; height:7px; cursor:ns-resize; touch-action:pan-y; z-index:4}
+.b-resize-top{top:0} .b-resize-bot{bottom:0}
 .block:hover .b-resize-top{border-top:2px solid color-mix(in srgb, var(--c) 70%, var(--ink))}
 .block:hover .b-resize-bot{border-bottom:2px solid color-mix(in srgb, var(--c) 70%, var(--ink))}
 .block .b-time{font-family:var(--mono); font-size:10px; color:var(--ink-soft); display:block; margin-bottom:1px}
@@ -269,7 +269,7 @@ input,textarea,select{font-family:inherit; color:inherit}
 .field{display:flex; flex-direction:column; gap:6px; margin-bottom:15px}
 .field label{font-size:12.5px; font-weight:600; color:var(--ink-soft); letter-spacing:.01em}
 .field .hint{font-size:11.5px; color:var(--ink-faint); font-weight:400; line-height:1.4}
-.field input[type=text],.field input[type=time],.field input[type=password],.field textarea,.field select{
+.field input[type=text],.field input[type=time],.field input[type=password],.field input[type=date],.field textarea,.field select{
   padding:11px 13px; border-radius:var(--r-sm); background:var(--raised);
   border:1px solid var(--line); font-size:14.5px; transition:border-color .15s;
 }
@@ -287,6 +287,12 @@ input,textarea,select{font-family:inherit; color:inherit}
 .dow-chip{width:38px; height:38px; border-radius:10px; background:var(--raised); border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--ink-soft); transition:all .14s ease}
 .dow-chip:hover{border-color:var(--ring)}
 .dow-chip.sel{background:var(--primary); border-color:var(--primary); color:var(--primary-ink)}
+.seg-tabs{display:flex; gap:6px; background:var(--sunk); padding:4px; border-radius:10px; margin-bottom:16px}
+.seg-tab{flex:1; padding:9px 0; border-radius:7px; background:transparent; border:none; font-size:13px; font-weight:600; color:var(--ink-faint); transition:all .15s ease}
+.seg-tab.active{background:var(--primary); color:var(--primary-ink)}
+.dow-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.dow-quick{font-size:12px; font-weight:600; padding:8px 11px; border-radius:9px; background:var(--surface); border:1px solid var(--line); color:var(--ink-soft); flex:0 0 auto}
+.dow-quick:hover{background:var(--raised); color:var(--ink); border-color:var(--ring)}
 
 /* ============ MODAL ============ */
 .overlay{
@@ -416,10 +422,10 @@ input,textarea,select{font-family:inherit; color:inherit}
   .tl-wrap{height:64vh}
   .brand .sub{display:none}
 }
-/* กัน iOS Safari ซูมเข้าอัตโนมัติเมื่อโฟกัสช่องพิมพ์: บังคับ input >=16px บนจอเล็ก */
+/* prevent iOS Safari auto-zoom on input focus: force inputs >=16px on small screens */
 @media (max-width:680px){
   .task-add input, .notes-area,
-  .field input[type=text], .field input[type=time], .field input[type=password],
+  .field input[type=text], .field input[type=time], .field input[type=password], .field input[type=date],
   .field textarea, .field select, #codeInput{ font-size:16px; }
 }
 @media (prefers-reduced-motion:reduce){
@@ -434,31 +440,31 @@ input,textarea,select{font-family:inherit; color:inherit}
   <div class="topbar">
     <div class="brand">
       <h1>Daily Planner</h1>
-      <span class="sub">ผังงานรายวัน</span>
+      <span class="sub">Daily Planner Board</span>
     </div>
     <span class="clock" id="clock">--:--</span>
     <div class="tools">
-      <button class="icon-btn live" id="syncBtn" title="ซิงค์ข้อมูล" aria-label="ซิงค์ข้อมูล">
+      <button class="icon-btn live" id="syncBtn" title="Sync data" aria-label="Sync data">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
         <span class="sync-dot off" id="syncDot"></span>
       </button>
-      <button class="icon-btn" id="graphBtn" title="สรุปเวลารายสัปดาห์" aria-label="สรุปเวลารายสัปดาห์">
+      <button class="icon-btn" id="graphBtn" title="Weekly time summary" aria-label="Weekly time summary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M12 20V4M20 20v-7"/></svg>
       </button>
-      <button class="icon-btn" id="themeBtn" title="สลับธีม" aria-label="สลับธีม">
+      <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
         <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
       <div class="menu-anchor">
-        <button class="icon-btn" id="menuBtn" title="เมนู" aria-label="เมนู">
+        <button class="icon-btn" id="menuBtn" title="Menu" aria-label="Menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>
         </button>
         <div class="menu" id="menu">
-          <button id="mExport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>ส่งออกเป็นไฟล์ JSON</button>
-          <button id="mImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>นำเข้าไฟล์ JSON</button>
+          <button id="mExport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Export as JSON</button>
+          <button id="mImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>Import JSON file</button>
           <div class="sep"></div>
-          <button id="mSync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8"/></svg>ตั้งค่าซิงค์ (Gist)</button>
-          <button id="mTemplates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>เทมเพลตตาราง</button>
-          <button id="mHelp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3M12 17h.01"/></svg>วิธีใช้</button>
+          <button id="mSync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8"/></svg>Sync settings (Gist)</button>
+          <button id="mTemplates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Day templates</button>
+          <button id="mHelp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3M12 17h.01"/></svg>Help</button>
         </div>
       </div>
     </div>
@@ -467,17 +473,17 @@ input,textarea,select{font-family:inherit; color:inherit}
   <!-- date nav -->
   <div class="datebar">
     <div class="daynav">
-      <button class="nav-arrow" id="prevDay" aria-label="วันก่อนหน้า"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="nav-arrow" id="prevDay" aria-label="Previous day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div class="curdate" id="curdate">
         <span class="dow" id="dowLabel">—</span>
         <span class="dnum" id="dnumLabel">—</span>
       </div>
-      <button class="nav-arrow" id="nextDay" aria-label="วันถัดไป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="nav-arrow" id="nextDay" aria-label="Next day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
-    <button class="today-btn" id="todayBtn">วันนี้</button>
+    <button class="today-btn" id="todayBtn">Today</button>
     <div class="date-pick">
-      <button class="icon-btn" aria-label="เลือกวันที่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
-      <input type="date" id="datePick" aria-label="เลือกวันที่">
+      <button class="icon-btn" aria-label="Pick a date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
+      <input type="date" id="datePick" aria-label="Pick a date">
     </div>
   </div>
 
@@ -486,9 +492,9 @@ input,textarea,select{font-family:inherit; color:inherit}
 
   <!-- mobile tabs -->
   <div class="tabs">
-    <button class="tab active" data-tab="schedule">ตาราง</button>
-    <button class="tab" data-tab="tasks">งาน</button>
-    <button class="tab" data-tab="notes">โน้ต</button>
+    <button class="tab active" data-tab="schedule">Schedule</button>
+    <button class="tab" data-tab="tasks">Tasks</button>
+    <button class="tab" data-tab="notes">Notes</button>
   </div>
 
   <!-- board -->
@@ -498,9 +504,9 @@ input,textarea,select{font-family:inherit; color:inherit}
       <div class="zone-head">
         <div>
           <div class="kicker">Schedule</div>
-          <h2>ตารางเวลา</h2>
+          <h2>Timeline</h2>
         </div>
-        <button class="add-btn" id="addBlock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>บล็อก</button>
+        <button class="add-btn" id="addBlock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Block</button>
       </div>
       <div class="zone-body">
         <div class="tl-wrap" id="tlWrap">
@@ -514,19 +520,19 @@ input,textarea,select{font-family:inherit; color:inherit}
       <div class="zone-head">
         <div>
           <div class="kicker">Tasks</div>
-          <h2>รายการงาน</h2>
+          <h2>Task List</h2>
         </div>
         <span class="count" id="taskCount"></span>
       </div>
       <div class="zone-body">
         <div class="carryover-bar" id="carryoverBar" style="display:none">
           <span id="carryoverText"></span>
-          <button type="button" id="carryoverBtn">ย้ายมาวันนี้</button>
+          <button type="button" id="carryoverBtn">Move to today</button>
         </div>
         <div class="task-add">
-          <input type="text" id="taskInput" placeholder="เพิ่มงาน แล้วกด Enter" autocomplete="off">
-          <button id="taskRecurBtn" type="button" aria-label="เพิ่มงานทำซ้ำ" title="เพิ่มงานทำซ้ำทุกสัปดาห์"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
-          <button id="taskAddBtn" aria-label="เพิ่มงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <input type="text" id="taskInput" placeholder="Add a task, then press Enter" autocomplete="off">
+          <button id="taskRecurBtn" type="button" aria-label="Add recurring task" title="Add a task that repeats weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+          <button id="taskAddBtn" aria-label="Add task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <ul class="tasklist" id="taskList"></ul>
       </div>
@@ -537,14 +543,14 @@ input,textarea,select{font-family:inherit; color:inherit}
       <div class="zone-head">
         <div>
           <div class="kicker">Journal</div>
-          <h2>โน้ต / ไดอารี่</h2>
+          <h2>Notes / Journal</h2>
         </div>
       </div>
       <div class="zone-body">
-        <textarea class="notes-area" id="notes" placeholder="บันทึกความคิด สิ่งที่เกิดขึ้น หรือไดอารี่ของวันนี้..."></textarea>
+        <textarea class="notes-area" id="notes" placeholder="Jot down thoughts, what happened, or today's journal entry..."></textarea>
         <div class="notes-meta">
-          <span id="charCount">0 ตัวอักษร</span>
-          <span class="saved" id="notesSaved">บันทึกแล้ว</span>
+          <span id="charCount">0 characters</span>
+          <span class="saved" id="notesSaved">Saved</span>
         </div>
       </div>
     </section>
@@ -565,12 +571,12 @@ const pad2=n=>String(n).padStart(2,"0");
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
-const DOW_FULL=["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
-const DOW_SHORT=["อา","จ","อ","พ","พฤ","ศ","ส"];
-const MON_SHORT=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const DOW_FULL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DOW_SHORT=["Su","Mo","Tu","We","Th","Fr","Sa"];
+const MON_SHORT=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const COLORS=[
-  {n:"ทราย",h:"#B8AE97"},{n:"เซจ",h:"#9BA98C"},{n:"ดินเผา",h:"#C29B86"},
-  {n:"สเลท",h:"#8FA0AD"},{n:"กุหลาบ",h:"#C2A0A4"},{n:"มะกอก",h:"#ADA46F"},{n:"เทา",h:"#A6A091"}
+  {n:"Sand",h:"#B8AE97"},{n:"Sage",h:"#9BA98C"},{n:"Terracotta",h:"#C29B86"},
+  {n:"Slate",h:"#8FA0AD"},{n:"Rose",h:"#C2A0A4"},{n:"Olive",h:"#ADA46F"},{n:"Grey",h:"#A6A091"}
 ];
 function catById(id){ return id?(state.categories||[]).find(c=>c.id===id):null; }
 function blockColor(b){ const cat=catById(b.categoryId); return cat?cat.color:(b.color||COLORS[0].h); }
@@ -583,6 +589,14 @@ function dateFromKey(k){const[y,m,dd]=k.split("-").map(Number);return new Date(y
 function todayKey(){return keyFromDate(new Date());}
 const hmToMin=s=>{const[h,m]=s.split(":").map(Number);return h*60+(m||0);};
 const minToHM=m=>pad2(Math.floor(m/60)%24)+":"+pad2(m%60);
+const MON_FRI=[1,2,3,4,5];
+function isMonFriFullySelected(daysSet){ return MON_FRI.every(d=>daysSet.has(d)); }
+function toggleMonFriSelection(daysSet){
+  const allSel=isMonFriFullySelected(daysSet);
+  const next=new Set(daysSet);
+  MON_FRI.forEach(d=>{ if(allSel) next.delete(d); else next.add(d); });
+  return next;
+}
 
 /* ===================== safe storage ===================== */
 const STORE_KEY="daily-planner-v1";
@@ -600,8 +614,8 @@ let syncTimer=null;
 
 function loadState(){
   const raw=storage.get(STORE_KEY);
-  if(raw){try{const s=JSON.parse(raw); s.days=s.days||{}; s.settings=s.settings||{}; s.categories=s.categories||[]; s.categoriesUpdated=s.categoriesUpdated||0; s.recurring=s.recurring||[]; s.recurringUpdated=s.recurringUpdated||0; s.templates=s.templates||[]; s.templatesUpdated=s.templatesUpdated||0; return s;}catch(e){}}
-  return {days:{},settings:{theme:"light",gist:{token:"",gistId:"",pass:"",auto:true}},categories:[],categoriesUpdated:0,recurring:[],recurringUpdated:0,templates:[],templatesUpdated:0,lastModified:0};
+  if(raw){try{const s=JSON.parse(raw); s.days=s.days||{}; s.settings=s.settings||{}; s.categories=s.categories||[]; s.categoriesUpdated=s.categoriesUpdated||0; s.recurring=s.recurring||[]; s.recurringUpdated=s.recurringUpdated||0; s.templates=s.templates||[]; s.templatesUpdated=s.templatesUpdated||0; s.termRange=s.termRange||null; s.termRangeUpdated=s.termRangeUpdated||0; return s;}catch(e){}}
+  return {days:{},settings:{theme:"light",gist:{token:"",gistId:"",pass:"",auto:true}},categories:[],categoriesUpdated:0,recurring:[],recurringUpdated:0,templates:[],templatesUpdated:0,termRange:null,termRangeUpdated:0,lastModified:0};
 }
 let saveDebounce=null;
 function saveState(touch=true){
@@ -642,13 +656,19 @@ function renderWeek(){
 
 /* ===================== render: schedule timeline ===================== */
 const HOUR_H=58, PMIN=HOUR_H/60;
+function inTermRange(dateKey){
+  const tr=state.termRange;
+  if(!tr||!tr.start||!tr.end) return true; // term range not set = unrestricted
+  return dateKey>=tr.start && dateKey<=tr.end;
+}
 function recurringBlocksForDate(dateObj,dateKey){
   const dow=dateObj.getDay(), out=[];
   for(const t of (state.recurring||[])){
     if(t.type!=="block")continue;
     if(!t.days||!t.days.includes(dow))continue;
     if(t.skipDates&&t.skipDates.includes(dateKey))continue;
-    out.push({id:"rec:"+t.id,title:t.title,start:t.start,end:t.end,color:t.color,categoryId:t.categoryId,note:t.note,isRecurring:true,recurringId:t.id});
+    if(t.isClass && !inTermRange(dateKey))continue;
+    out.push({id:"rec:"+t.id,title:t.title,start:t.start,end:t.end,color:t.color,categoryId:t.categoryId,note:t.note,isRecurring:true,recurringId:t.id,isClass:!!t.isClass,room:t.room||null});
   }
   return out;
 }
@@ -678,7 +698,7 @@ function renderSchedule(){
     track.style.height="100%";
     const e=document.createElement("div");
     e.className="tl-empty";
-    e.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>ยังไม่มีบล็อกเวลา<br>แตะที่ timeline หรือปุ่ม “บล็อก” เพื่อเพิ่ม</span>';
+    e.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>No time blocks yet<br>Tap the timeline or the "Block" button to add one</span>';
     track.appendChild(e);
     return;
   }
@@ -702,7 +722,8 @@ function renderSchedule(){
     el.style.width="calc("+w+"% - "+(b._ncols>1?gap+2:6)+"px)";
     el.style.setProperty("--c",blockColor(b));
     const recIcon=b.isRecurring?'<svg class="b-rec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>':"";
-    el.innerHTML='<div class="b-resize b-resize-top"></div>'+recIcon+'<span class="b-time">'+b.start+"–"+b.end+'</span><span class="b-title">'+escapeHtml(b.title||"(ไม่มีชื่อ)")+'</span><div class="b-resize b-resize-bot"></div>';
+    const displayTitle=(b.isClass&&b.room)?((b.title||"(Untitled)")+" · "+b.room):(b.title||"(Untitled)");
+    el.innerHTML='<div class="b-resize b-resize-top"></div>'+recIcon+'<span class="b-time">'+b.start+"–"+b.end+'</span><span class="b-title">'+escapeHtml(displayTitle)+'</span><div class="b-resize b-resize-bot"></div>';
     el.onclick=ev=>{ev.stopPropagation(); if(el.dataset.justDragged)return; if(b.isRecurring)openRecurringBlockModal(b.recurringId,currentKey); else openBlockModal(b.id);};
     attachBlockDrag(el,b,currentKey);
     track.appendChild(el);
@@ -731,28 +752,68 @@ $("#track").addEventListener("click",ev=>{
 
 /* ---- drag/resize block directly on timeline ---- */
 function attachBlockDrag(el,b,dayKeyAtRender){
-  const MIN_DUR=15, THRESH=4;
-  let downY=0, moved=false, startTop=0, startHeight=0, mode=null;
+  const MIN_DUR=15, THRESH=4, LONG_PRESS_MS=250, TOUCH_CANCEL_PX=8;
+  let downX=0, downY=0, moved=false, startTop=0, startHeight=0, mode=null;
+  let longPressTimer=null, activeTarget=null, activePointerId=null;
   function pxToSnapMin(px){ return Math.round((px/PMIN)/15)*15; }
+  function activateTouchDrag(){
+    longPressTimer=null; moved=true;
+    el.classList.add("dragging-block");
+    if(activeTarget) activeTarget.style.touchAction="none";
+    if(navigator.vibrate){ try{ navigator.vibrate(12); }catch(_){} }
+  }
+  function cleanupListeners(){
+    document.removeEventListener("pointermove",onMove);
+    document.removeEventListener("pointerup",onUp);
+    document.removeEventListener("pointercancel",onCancel);
+  }
+  function resetTouchAction(){
+    if(activeTarget){ activeTarget.style.touchAction=""; activeTarget=null; }
+  }
   function onDown(ev,m){
     if(ev.button!=null && ev.button!==0)return;
+    const isTouch=ev.pointerType==="touch"||ev.pointerType==="pen";
     ev.stopPropagation();
-    mode=m; moved=false; downY=ev.clientY;
+    mode=m; moved=false; downX=ev.clientX; downY=ev.clientY;
     startTop=parseFloat(el.style.top); startHeight=parseFloat(el.style.height);
+    activePointerId=ev.pointerId; activeTarget=ev.currentTarget;
+    clearTimeout(longPressTimer); longPressTimer=null;
+    if(isTouch){ longPressTimer=setTimeout(activateTouchDrag,LONG_PRESS_MS); }
     document.addEventListener("pointermove",onMove);
     document.addEventListener("pointerup",onUp,{once:true});
+    document.addEventListener("pointercancel",onCancel,{once:true});
   }
   function onMove(ev){
-    const dy=ev.clientY-downY;
-    if(!moved && Math.abs(dy)>THRESH){ moved=true; el.classList.add("dragging-block"); }
+    if(activePointerId!=null && ev.pointerId!==activePointerId)return;
+    const dx=ev.clientX-downX, dy=ev.clientY-downY;
+    const isTouch=ev.pointerType==="touch"||ev.pointerType==="pen";
+    if(isTouch && longPressTimer){
+      // still waiting for the long-press to complete: any real movement means
+      // the person is scrolling the timeline, not trying to grab the block.
+      if(Math.abs(dx)>TOUCH_CANCEL_PX || Math.abs(dy)>TOUCH_CANCEL_PX){
+        clearTimeout(longPressTimer); longPressTimer=null;
+        cleanupListeners(); resetTouchAction(); mode=null;
+      }
+      return;
+    }
+    if(!isTouch && !moved && Math.abs(dy)>THRESH){ moved=true; el.classList.add("dragging-block"); }
     if(!moved)return;
     if(mode==="move"){ el.style.top=(startTop+dy)+"px"; }
     else if(mode==="resize-top"){ const nh=startHeight-dy; if(nh>=MIN_DUR*PMIN-2){ el.style.top=(startTop+dy)+"px"; el.style.height=nh+"px"; } }
     else if(mode==="resize-bot"){ const nh=startHeight+dy; if(nh>=MIN_DUR*PMIN-2){ el.style.height=nh+"px"; } }
   }
-  function onUp(){
-    document.removeEventListener("pointermove",onMove);
+  function onCancel(){
+    clearTimeout(longPressTimer); longPressTimer=null;
+    cleanupListeners();
     el.classList.remove("dragging-block");
+    resetTouchAction();
+    moved=false; mode=null;
+  }
+  function onUp(){
+    clearTimeout(longPressTimer); longPressTimer=null;
+    cleanupListeners();
+    el.classList.remove("dragging-block");
+    resetTouchAction();
     if(!moved){ mode=null; return; }
     el.dataset.justDragged="1"; setTimeout(()=>{delete el.dataset.justDragged;},80);
     const target=b.isRecurring?(state.recurring||[]).find(t=>t.id===b.recurringId):getDay(dayKeyAtRender).blocks.find(x=>x.id===b.id);
@@ -775,7 +836,7 @@ function attachBlockDrag(el,b,dayKeyAtRender){
       saveState();
     }
     if(currentKey===dayKeyAtRender) renderSchedule();
-    mode=null;
+    mode=null; moved=false;
   }
   el.addEventListener("pointerdown",ev=>{ if(ev.target.classList.contains("b-resize"))return; onDown(ev,"move"); });
   const th=el.querySelector(".b-resize-top"), bh=el.querySelector(".b-resize-bot");
@@ -795,45 +856,80 @@ function openBlockModal(id,prefillStart){
   const sw=swatchesHtml(color);
   const catOptions=(state.categories||[]).map(c=>'<option value="'+c.id+'"'+(c.id===curCatId?" selected":"")+'>'+escapeHtml(c.name)+'</option>').join("");
   const recurUI=id?"":(
-    '<div class="checkbox-row"><input type="checkbox" id="bRecurToggle"><label for="bRecurToggle">ทำซ้ำทุกสัปดาห์</label></div>'+
-    '<div class="field" id="bRecurRow" style="display:none"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="bRecurDays">'+
+    '<div class="checkbox-row"><input type="checkbox" id="bRecurToggle"><label for="bRecurToggle">Repeat weekly</label></div>'+
+    '<div class="field" id="bRecurRow" style="display:none"><label>Repeat on</label><div class="dow-picker" id="bRecurDays">'+
     DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip" data-d="'+i+'">'+d+'</button>').join("")+
     '</div></div>'
   );
+  const segTabsHtml=id?"":(
+    '<div class="seg-tabs" id="bModeTabs">'+
+      '<button type="button" class="seg-tab active" data-mode="normal">Regular block</button>'+
+      '<button type="button" class="seg-tab" data-mode="class">Class</button>'+
+    '</div>'
+  );
+  const tr0=state.termRange||{};
+  const classFieldsHtml=id?"":(
+    '<div id="classFields" style="display:none">'+
+      '<div class="field"><label>Subject</label><input type="text" id="clsSubject" placeholder="e.g. Mathematics"></div>'+
+      '<div class="field"><label>Room <span class="hint">(optional)</span></label><input type="text" id="clsRoom" placeholder="e.g. 4/2, Building B floor 3"></div>'+
+      '<div class="row2">'+
+        '<div class="field"><label>Start</label><input type="time" id="clsStart" value="'+start+'"></div>'+
+        '<div class="field"><label>End</label><input type="time" id="clsEnd" value="'+end+'"></div>'+
+      '</div>'+
+      '<div class="field"><label>Class days</label>'+
+        '<div class="dow-row">'+
+          '<div class="dow-picker" id="clsDays">'+DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip" data-d="'+i+'">'+d+'</button>').join("")+'</div>'+
+          '<button type="button" class="dow-quick" id="clsMonFri">Mon–Fri</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="divider"></div>'+
+      '<div class="field"><label>Term dates <span class="hint">(shared by all classes — hidden outside this range)</span></label>'+
+        '<div class="row2">'+
+          '<div class="field"><label>Term starts</label><input type="date" id="clsTermStart" value="'+(tr0.start||"")+'"></div>'+
+          '<div class="field"><label>Term ends</label><input type="date" id="clsTermEnd" value="'+(tr0.end||"")+'"></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'
+  );
   openModal(`
-    <div class="modal-head"><h3>${id?"แก้ไขบล็อก":"เพิ่มบล็อกเวลา"}</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>${id?"Edit Block":"Add Time Block"}</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="field"><label>ชื่อบล็อก</label>
-        <input type="text" id="bTitle" placeholder="เช่น เขียนสคริปต์ ACD" value="${b?escapeAttr(b.title):""}"></div>
-      <div class="row2">
-        <div class="field"><label>เริ่ม</label><input type="time" id="bStart" value="${start}"></div>
-        <div class="field"><label>จบ</label><input type="time" id="bEnd" value="${end}"></div>
+      ${segTabsHtml}
+      <div id="normalFields">
+        <div class="field"><label>Block title</label>
+          <input type="text" id="bTitle" placeholder="e.g. Write ACD script" value="${b?escapeAttr(b.title):""}"></div>
+        <div class="row2">
+          <div class="field"><label>Start</label><input type="time" id="bStart" value="${start}"></div>
+          <div class="field"><label>End</label><input type="time" id="bEnd" value="${end}"></div>
+        </div>
+        ${recurUI}
+        <div class="field"><label>Category <span class="hint">(optional)</span></label>
+          <select id="bCategory">
+            <option value="">No category</option>
+            ${catOptions}
+            <option value="__new__">+ Add new category...</option>
+          </select>
+        </div>
+        <div class="field" id="bNewCatRow" style="display:none">
+          <label>New category name</label>
+          <input type="text" id="bNewCatName" placeholder="e.g. ACD, Art, Admin">
+          <div class="swatches" id="bNewCatColors" style="margin-top:8px">${swatchesHtml(COLORS[0].h)}</div>
+          <button type="button" class="btn sm primary" id="bNewCatConfirm" style="margin-top:9px;width:100%">Create this category</button>
+        </div>
+        <div class="field" id="bColorField" style="${curCatId?"display:none":""}"><label>Color</label><div class="swatches" id="bColors">${sw}</div></div>
+        <div class="field"><label>Note <span class="hint">(optional)</span></label>
+          <textarea id="bNote" rows="2" placeholder="Additional details">${b&&b.note?escapeHtml(b.note):""}</textarea></div>
       </div>
-      ${recurUI}
-      <div class="field"><label>หมวดหมู่ <span class="hint">(ไม่บังคับ)</span></label>
-        <select id="bCategory">
-          <option value="">ไม่มีหมวดหมู่</option>
-          ${catOptions}
-          <option value="__new__">+ เพิ่มหมวดหมู่ใหม่...</option>
-        </select>
-      </div>
-      <div class="field" id="bNewCatRow" style="display:none">
-        <label>ชื่อหมวดหมู่ใหม่</label>
-        <input type="text" id="bNewCatName" placeholder="เช่น ACD, อาร์ต, แอดมิน">
-        <div class="swatches" id="bNewCatColors" style="margin-top:8px">${swatchesHtml(COLORS[0].h)}</div>
-        <button type="button" class="btn sm primary" id="bNewCatConfirm" style="margin-top:9px;width:100%">สร้างหมวดหมู่นี้</button>
-      </div>
-      <div class="field" id="bColorField" style="${curCatId?"display:none":""}"><label>สี</label><div class="swatches" id="bColors">${sw}</div></div>
-      <div class="field"><label>โน้ต <span class="hint">(ไม่บังคับ)</span></label>
-        <textarea id="bNote" rows="2" placeholder="รายละเอียดเพิ่มเติม">${b&&b.note?escapeHtml(b.note):""}</textarea></div>
+      ${classFieldsHtml}
     </div>
     <div class="modal-foot">
-      ${id?'<button class="btn danger sm spacer" id="bDelete">ลบ</button>':""}
-      <button class="btn primary" id="bSave">${id?"บันทึก":"เพิ่มบล็อก"}</button>
+      ${id?'<button class="btn danger sm spacer" id="bDelete">Delete</button>':""}
+      <button class="btn primary" id="bSave">${id?"Save":"Add Block"}</button>
     </div>
   `);
   let chosen=color, newCatColor=COLORS[0].h, recurDays=new Set();
+  let blockMode="normal", clsDaysSel=new Set();
   $$("#bColors .swatch").forEach(s=>s.onclick=()=>{chosen=s.dataset.c; $$("#bColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
   $$("#bNewCatColors .swatch").forEach(s=>s.onclick=()=>{newCatColor=s.dataset.c; $$("#bNewCatColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
   if(!id){
@@ -844,6 +940,36 @@ function openBlockModal(id,prefillStart){
       if(recurDays.has(d)){recurDays.delete(d);ch.classList.remove("sel");}
       else{recurDays.add(d);ch.classList.add("sel");}
     });
+    const modeTabs=$$("#bModeTabs .seg-tab");
+    modeTabs.forEach(t=>t.onclick=()=>{
+      modeTabs.forEach(x=>x.classList.remove("active")); t.classList.add("active");
+      blockMode=t.dataset.mode;
+      const isClass=blockMode==="class";
+      $("#normalFields").style.display=isClass?"none":"";
+      $("#classFields").style.display=isClass?"":"none";
+      $("#bSave").textContent=isClass?"Add Class":"Add Block";
+    });
+    $$("#clsDays .dow-chip").forEach(ch=>ch.onclick=()=>{
+      const d=+ch.dataset.d;
+      if(clsDaysSel.has(d)){clsDaysSel.delete(d);ch.classList.remove("sel");}
+      else{clsDaysSel.add(d);ch.classList.add("sel");}
+    });
+    $("#clsMonFri").onclick=()=>{
+      clsDaysSel=toggleMonFriSelection(clsDaysSel);
+      $$("#clsDays .dow-chip").forEach(ch=>{
+        const d=+ch.dataset.d;
+        ch.classList.toggle("sel",clsDaysSel.has(d));
+      });
+    };
+    const persistTermRange=()=>{
+      const s=$("#clsTermStart").value, e=$("#clsTermEnd").value;
+      state.termRange={start:s||"",end:e||""};
+      state.termRangeUpdated=Date.now();
+      saveState(false);
+      if(currentKey) renderSchedule();
+    };
+    $("#clsTermStart").addEventListener("change",persistTermRange);
+    $("#clsTermEnd").addEventListener("change",persistTermRange);
   }
   const catSel=$("#bCategory");
   function syncColorFieldVisibility(){ $("#bColorField").style.display=catSel.value?"none":""; }
@@ -854,7 +980,7 @@ function openBlockModal(id,prefillStart){
   };
   $("#bNewCatConfirm").onclick=()=>{
     const name=$("#bNewCatName").value.trim();
-    if(!name){toast("ใส่ชื่อหมวดหมู่ก่อน");return;}
+    if(!name){toast("Enter a category name first");return;}
     const cat={id:uid(),name,color:newCatColor};
     state.categories=state.categories||[]; state.categories.push(cat);
     state.categoriesUpdated=Date.now(); saveState(false);
@@ -862,12 +988,29 @@ function openBlockModal(id,prefillStart){
     catSel.insertBefore(opt,catSel.querySelector('option[value="__new__"]'));
     catSel.value=cat.id;
     $("#bNewCatRow").style.display="none"; syncColorFieldVisibility();
-    toast("เพิ่มหมวดหมู่ "+name+" แล้ว");
+    toast("Added category "+name);
   };
   $("#bSave").onclick=()=>{
+    if(!id && blockMode==="class"){
+      const subject=$("#clsSubject").value.trim();
+      if(!subject){toast("Enter a subject name first");return;}
+      let cst=$("#clsStart").value, cen=$("#clsEnd").value;
+      if(!cst||!cen){toast("Enter both start and end time");return;}
+      if(hmToMin(cen)===hmToMin(cst)){ cen=minToHM((hmToMin(cst)+30)%1440); }
+      if(clsDaysSel.size===0){toast("Choose at least 1 class day");return;}
+      const room=$("#clsRoom").value.trim();
+      const classCount=(state.recurring||[]).filter(t=>t.isClass).length;
+      const clsColor=COLORS[classCount%COLORS.length].h;
+      const tmpl={id:uid(),type:"block",title:subject,room:room||null,isClass:true,start:cst,end:cen,color:clsColor,categoryId:null,note:"",days:[...clsDaysSel].sort(),skipDates:[],u:Date.now()};
+      state.recurring=state.recurring||[]; state.recurring.push(tmpl);
+      state.recurringUpdated=Date.now();
+      saveState(); closeModal(); renderSchedule();
+      toast("Added "+subject+" to your class schedule");
+      return;
+    }
     const title=$("#bTitle").value.trim();
     let st=$("#bStart").value, en=$("#bEnd").value;
-    if(!st||!en){toast("ใส่เวลาเริ่มและจบให้ครบ");return;}
+    if(!st||!en){toast("Enter both start and end time");return;}
     if(hmToMin(en)===hmToMin(st)){ en=minToHM((hmToMin(st)+30)%1440); }
     const catId=(catSel.value&&catSel.value!=="__new__")?catSel.value:"";
     const cat=catId?state.categories.find(c=>c.id===catId):null;
@@ -876,27 +1019,27 @@ function openBlockModal(id,prefillStart){
     if(!id){
       const rt=$("#bRecurToggle");
       if(rt&&rt.checked){
-        if(recurDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
-        const tmpl={id:uid(),type:"block",title:title||"(ไม่มีชื่อ)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal,days:[...recurDays].sort(),skipDates:[],u:Date.now()};
+        if(recurDays.size===0){toast("Choose at least 1 day to repeat on");return;}
+        const tmpl={id:uid(),type:"block",title:title||"(Untitled)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal,days:[...recurDays].sort(),skipDates:[],u:Date.now()};
         state.recurring=state.recurring||[]; state.recurring.push(tmpl);
         state.recurringUpdated=Date.now();
         saveState(); closeModal(); renderSchedule();
-        toast("สร้างบล็อกทำซ้ำแล้ว");
+        toast("Recurring block created");
         return;
       }
     }
     const day=getDay(currentKey);
     if(id){ const blk=day.blocks.find(x=>x.id===id); Object.assign(blk,{title,start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal}); }
-    else{ day.blocks.push({id:uid(),title:title||"(ไม่มีชื่อ)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal}); }
+    else{ day.blocks.push({id:uid(),title:title||"(Untitled)",start:st,end:en,color:finalColor,categoryId:catId||null,note:noteVal}); }
     saveState(); closeModal(); renderSchedule();
-    toast(id?"แก้ไขบล็อกแล้ว":"เพิ่มบล็อกแล้ว");
+    toast(id?"Block updated":"Block added");
   };
   if(id){ $("#bDelete").onclick=()=>{
     const dk=currentKey, day=getDay(dk), removed=day.blocks.find(x=>x.id===id);
     day.blocks=day.blocks.filter(x=>x.id!==id);
     saveState(); closeModal(); renderSchedule();
     pushUndo(()=>{ const d=getDay(dk); d.blocks.push(removed); saveState(); if(currentKey===dk)renderSchedule(); });
-    toast("ลบบล็อกแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    toast("Block deleted","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
   }; }
   setTimeout(()=>$("#bTitle").focus(),60);
 }
@@ -904,35 +1047,37 @@ function openBlockModal(id,prefillStart){
 /* ===================== recurring block edit (template) ===================== */
 function openRecurringBlockModal(recurringId,dayKeyAtRender){
   const tmpl=(state.recurring||[]).find(t=>t.id===recurringId);
-  if(!tmpl){ toast("ไม่พบบล็อกทำซ้ำนี้ อาจถูกลบไปแล้ว"); renderSchedule(); return; }
+  if(!tmpl){ toast("This recurring block was not found, it may have been deleted"); renderSchedule(); return; }
   const curCatId=tmpl.categoryId||"";
   const sw=swatchesHtml(tmpl.color);
   const catOptions=(state.categories||[]).map(c=>'<option value="'+c.id+'"'+(c.id===curCatId?" selected":"")+'>'+escapeHtml(c.name)+'</option>').join("");
   const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip'+(tmpl.days.includes(i)?" sel":"")+'" data-d="'+i+'">'+d+'</button>').join("");
   const dObj=dateFromKey(dayKeyAtRender);
   const dayLabel=dObj.getDate()+" "+MON_SHORT[dObj.getMonth()];
+  const roomFieldHtml=tmpl.isClass?('<div class="field"><label>Room <span class="hint">(optional)</span></label><input type="text" id="rRoom" value="'+escapeAttr(tmpl.room||"")+'"></div>'):"";
   openModal(`
-    <div class="modal-head"><h3>แก้ไขบล็อกทำซ้ำ</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>${tmpl.isClass?"Edit Class":"Edit Recurring Block"}</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="sync-status">แก้ไขที่นี่จะมีผลกับทุกวันในชุดนี้</div>
-      <div class="field"><label>ชื่อบล็อก</label><input type="text" id="rTitle" value="${escapeAttr(tmpl.title)}"></div>
+      <div class="sync-status">Editing here affects every day in this set${tmpl.isClass?" · term dates are set on the add-class screen":""}</div>
+      <div class="field"><label>${tmpl.isClass?"Subject":"Block title"}</label><input type="text" id="rTitle" value="${escapeAttr(tmpl.title)}"></div>
+      ${roomFieldHtml}
       <div class="row2">
-        <div class="field"><label>เริ่ม</label><input type="time" id="rStart" value="${tmpl.start}"></div>
-        <div class="field"><label>จบ</label><input type="time" id="rEnd" value="${tmpl.end}"></div>
+        <div class="field"><label>Start</label><input type="time" id="rStart" value="${tmpl.start}"></div>
+        <div class="field"><label>End</label><input type="time" id="rEnd" value="${tmpl.end}"></div>
       </div>
-      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rDays">${dowChips}</div></div>
-      <div class="field"><label>หมวดหมู่ <span class="hint">(ไม่บังคับ)</span></label>
-        <select id="rCategory"><option value="">ไม่มีหมวดหมู่</option>${catOptions}</select></div>
-      <div class="field" id="rColorField" style="${curCatId?"display:none":""}"><label>สี</label><div class="swatches" id="rColors">${sw}</div></div>
-      <div class="field"><label>โน้ต <span class="hint">(ไม่บังคับ)</span></label>
+      <div class="field"><label>Repeat on</label><div class="dow-picker" id="rDays">${dowChips}</div></div>
+      <div class="field"><label>Category <span class="hint">(optional)</span></label>
+        <select id="rCategory"><option value="">No category</option>${catOptions}</select></div>
+      <div class="field" id="rColorField" style="${curCatId?"display:none":""}"><label>Color</label><div class="swatches" id="rColors">${sw}</div></div>
+      <div class="field"><label>Note <span class="hint">(optional)</span></label>
         <textarea id="rNote" rows="2">${tmpl.note?escapeHtml(tmpl.note):""}</textarea></div>
       <div class="divider"></div>
-      <button class="btn sm" id="rSkipToday" style="width:100%">ลบเฉพาะวันที่ ${dayLabel}</button>
+      <button class="btn sm" id="rSkipToday" style="width:100%">Remove just ${dayLabel}</button>
     </div>
     <div class="modal-foot">
-      <button class="btn danger sm spacer" id="rDeleteAll">ลบทั้งชุด</button>
-      <button class="btn primary" id="rSave">บันทึก</button>
+      <button class="btn danger sm spacer" id="rDeleteAll">Delete entire set</button>
+      <button class="btn primary" id="rSave">Save</button>
     </div>
   `);
   let chosen=tmpl.color;
@@ -949,15 +1094,16 @@ function openRecurringBlockModal(recurringId,dayKeyAtRender){
   $("#rSave").onclick=()=>{
     const title=$("#rTitle").value.trim();
     let st=$("#rStart").value, en=$("#rEnd").value;
-    if(!st||!en){toast("ใส่เวลาเริ่มและจบให้ครบ");return;}
+    if(!st||!en){toast("Enter both start and end time");return;}
     if(hmToMin(en)===hmToMin(st)){ en=minToHM((hmToMin(st)+30)%1440); }
-    if(selDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
+    if(selDays.size===0){toast("Choose at least 1 day to repeat on");return;}
     const catId=catSel.value||"";
     const cat=catId?state.categories.find(c=>c.id===catId):null;
-    Object.assign(tmpl,{title:title||"(ไม่มีชื่อ)",start:st,end:en,color:cat?cat.color:chosen,categoryId:catId||null,note:$("#rNote").value.trim(),days:[...selDays].sort(),u:Date.now()});
+    const extra=tmpl.isClass?{room:($("#rRoom").value.trim()||null)}:{};
+    Object.assign(tmpl,{title:title||"(Untitled)",start:st,end:en,color:cat?cat.color:chosen,categoryId:catId||null,note:$("#rNote").value.trim(),days:[...selDays].sort(),u:Date.now(),...extra});
     state.recurringUpdated=Date.now();
     saveState(); closeModal(); renderSchedule();
-    toast("แก้ไขชุดทำซ้ำแล้ว");
+    toast(tmpl.isClass?"Class updated":"Recurring set updated");
   };
   $("#rSkipToday").onclick=()=>{
     tmpl.skipDates=tmpl.skipDates||[];
@@ -965,16 +1111,16 @@ function openRecurringBlockModal(recurringId,dayKeyAtRender){
     tmpl.u=Date.now(); state.recurringUpdated=Date.now();
     saveState(); closeModal(); renderSchedule();
     pushUndo(()=>{ tmpl.skipDates=(tmpl.skipDates||[]).filter(d=>d!==dayKeyAtRender); tmpl.u=Date.now(); state.recurringUpdated=Date.now(); saveState(); renderSchedule(); });
-    toast("ข้ามวันนี้แล้ว วันอื่นไม่กระทบ","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    toast("Skipped today, other days aren't affected","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
   };
   $("#rDeleteAll").onclick=()=>{
-    if(!confirm('ลบบล็อกทำซ้ำ "'+tmpl.title+'" ทั้งชุด? จะหายจากทุกวัน')) return;
+    if(!confirm('Delete the entire recurring set "'+tmpl.title+'"? It will disappear from every day')) return;
     const removed=tmpl;
     state.recurring=state.recurring.filter(t=>t.id!==tmpl.id);
     state.recurringUpdated=Date.now();
     saveState(); closeModal(); renderSchedule();
     pushUndo(()=>{ state.recurring=state.recurring||[]; state.recurring.push(removed); state.recurringUpdated=Date.now(); saveState(); renderSchedule(); });
-    toast("ลบชุดทำซ้ำแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    toast("Recurring set deleted","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
   };
 }
 
@@ -998,7 +1144,7 @@ function weekCategoryData(weekStart){
   }
   return days;
 }
-function fmtHM(m){ const h=Math.floor(m/60), mm=Math.round(m%60); if(h<=0)return mm+"น."; return h+"ชม."+(mm>0?" "+mm+"น.":""); }
+function fmtHM(m){ const h=Math.floor(m/60), mm=Math.round(m%60); if(h<=0)return mm+"m"; return h+"h"+(mm>0?" "+mm+"m":""); }
 function renderGraphBars(days){
   const trackH=140;
   const maxTotal=Math.max(1,...days.map(d=>d.total));
@@ -1013,7 +1159,7 @@ function renderGraphBars(days){
         const segH=(dur/d.total)*barH;
         const cat=cid==="_none"?null:catById(cid);
         const color=cat?cat.color:"var(--ink-faint)";
-        const nm=cat?cat.name:"ไม่มีหมวดหมู่";
+        const nm=cat?cat.name:"No category";
         segs+='<div class="gbar-seg" style="height:'+segH+'px;background:'+color+'" title="'+escapeAttr(nm)+' '+fmtHM(dur)+'"></div>';
       }
     }
@@ -1029,12 +1175,12 @@ function renderGraphLegend(days){
   for(const cid of catOrder){
     const m=totals[cid]; if(!m)continue;
     const cat=cid==="_none"?null:catById(cid);
-    const nm=cat?escapeHtml(cat.name):"ไม่มีหมวดหมู่";
+    const nm=cat?escapeHtml(cat.name):"No category";
     const color=cat?cat.color:"var(--ink-faint)";
     html+='<div class="glegend-row"><span class="glegend-dot" style="background:'+color+'"></span><span class="glegend-name">'+nm+'</span><span class="glegend-val">'+fmtHM(m)+'</span></div>';
   }
-  if(!html) html='<div class="list-empty">ยังไม่มีข้อมูลสัปดาห์นี้</div>';
-  return {html,grandLabel:grand>0?("รวม "+fmtHM(grand)):"ยังไม่มีข้อมูลสัปดาห์นี้"};
+  if(!html) html='<div class="list-empty">No data for this week yet</div>';
+  return {html,grandLabel:grand>0?("Total "+fmtHM(grand)):"No data for this week yet"};
 }
 let graphWeekStart=null;
 function renderGraphModalContent(){
@@ -1044,19 +1190,19 @@ function renderGraphModalContent(){
   const endW=new Date(graphWeekStart); endW.setDate(graphWeekStart.getDate()+6);
   const label=graphWeekStart.getDate()+" "+MON_SHORT[graphWeekStart.getMonth()]+" – "+endW.getDate()+" "+MON_SHORT[endW.getMonth()]+" "+endW.getFullYear();
   openModal(`
-    <div class="modal-head"><h3>สรุปเวลารายสัปดาห์</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Weekly Time Summary</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
       <div class="graph-nav">
-        <button class="nav-arrow" id="gwPrev" aria-label="สัปดาห์ก่อน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="nav-arrow" id="gwPrev" aria-label="Previous week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
         <span class="graph-wlabel">${label}</span>
-        <button class="nav-arrow" id="gwNext" aria-label="สัปดาห์ถัดไป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button class="nav-arrow" id="gwNext" aria-label="Next week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
       <div class="graph-bars">${barsHtml}</div>
       <div class="graph-total">${grandLabel}</div>
       <div class="graph-legend">${legendHtml}</div>
     </div>
-    <div class="modal-foot"><button class="btn sm" id="manageCatBtn">จัดการหมวดหมู่</button><button class="btn primary" data-close>ปิด</button></div>
+    <div class="modal-foot"><button class="btn sm" id="manageCatBtn">Manage categories</button><button class="btn primary" data-close>Close</button></div>
   `);
   $("#gwPrev").onclick=()=>{ graphWeekStart.setDate(graphWeekStart.getDate()-7); renderGraphModalContent(); };
   $("#gwNext").onclick=()=>{ graphWeekStart.setDate(graphWeekStart.getDate()+7); renderGraphModalContent(); };
@@ -1070,13 +1216,13 @@ $("#graphBtn").onclick=()=>{
 
 /* ===================== category management ===================== */
 function renderCatListHtml(){
-  if(!(state.categories||[]).length) return '<div class="list-empty">ยังไม่มีหมวดหมู่ — เพิ่มด้านล่างได้เลย</div>';
+  if(!(state.categories||[]).length) return '<div class="list-empty">No categories yet — add one below</div>';
   return state.categories.map(c=>
     '<div class="cat-row" data-id="'+c.id+'">'+
       '<span class="cat-dot" style="background:'+c.color+'"></span>'+
       '<input type="text" class="cat-name-input" value="'+escapeAttr(c.name)+'">'+
-      '<button type="button" class="cat-recolor" style="background:'+c.color+'" aria-label="เปลี่ยนสี"></button>'+
-      '<button type="button" class="cat-del" aria-label="ลบหมวดหมู่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
+      '<button type="button" class="cat-recolor" style="background:'+c.color+'" aria-label="Change color"></button>'+
+      '<button type="button" class="cat-del" aria-label="Delete category"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
     '</div>'
   ).join("");
 }
@@ -1098,39 +1244,39 @@ function bindCatListEvents(){
       row.querySelector(".cat-recolor").style.background=next;
     };
     $(".cat-del",row).onclick=()=>{
-      if(!confirm('ลบหมวดหมู่ "'+cat.name+'"? บล็อกที่เคยตั้งไว้จะไม่ถูกลบ แค่จะไม่มีหมวดหมู่ต่อไป')) return;
+      if(!confirm('Delete category "'+cat.name+'"? Blocks already assigned to it won\'t be deleted, they\'ll just lose their category')) return;
       state.categories=state.categories.filter(c=>c.id!==id);
       state.categoriesUpdated=Date.now(); saveState(false);
       $("#catList").innerHTML=renderCatListHtml();
       bindCatListEvents();
-      toast("ลบหมวดหมู่แล้ว");
+      toast("Category deleted");
     };
   });
 }
 function openCategoryManageModal(){
   openModal(`
-    <div class="modal-head"><h3>จัดการหมวดหมู่</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Manage Categories</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
       <div id="catList">${renderCatListHtml()}</div>
       <div class="divider"></div>
-      <div class="field"><label>เพิ่มหมวดหมู่ใหม่</label>
-        <input type="text" id="newCatName" placeholder="เช่น ACD, อาร์ต, แอดมิน">
+      <div class="field"><label>Add new category</label>
+        <input type="text" id="newCatName" placeholder="e.g. ACD, Art, Admin">
         <div class="swatches" id="newCatColors" style="margin-top:8px">${swatchesHtml(COLORS[0].h)}</div>
       </div>
-      <button class="btn primary sm" id="addCatBtn" style="width:100%">+ เพิ่มหมวดหมู่</button>
+      <button class="btn primary sm" id="addCatBtn" style="width:100%">+ Add category</button>
     </div>
-    <div class="modal-foot"><button class="btn" id="backToGraphBtn">← กลับไปดูกราฟ</button></div>
+    <div class="modal-foot"><button class="btn" id="backToGraphBtn">← Back to graph</button></div>
   `);
   let newColor=COLORS[0].h;
   $$("#newCatColors .swatch").forEach(s=>s.onclick=()=>{newColor=s.dataset.c; $$("#newCatColors .swatch").forEach(x=>x.classList.remove("sel")); s.classList.add("sel");});
   $("#addCatBtn").onclick=()=>{
     const name=$("#newCatName").value.trim();
-    if(!name){toast("ใส่ชื่อหมวดหมู่ก่อน");return;}
+    if(!name){toast("Enter a category name first");return;}
     state.categories=state.categories||[]; state.categories.push({id:uid(),name,color:newColor});
     state.categoriesUpdated=Date.now(); saveState(false);
     openCategoryManageModal();
-    toast("เพิ่มหมวดหมู่แล้ว");
+    toast("Category added");
   };
   bindCatListEvents();
   $("#backToGraphBtn").onclick=()=>{ $("#graphBtn").click(); };
@@ -1160,7 +1306,7 @@ function getPendingCarryoverTasks(){
   for(const k of keys){
     const d=state.days[k]; if(!d||!d.tasks)continue;
     for(const t of d.tasks){
-      if(t.done||t.recurringId)continue; // งานทำซ้ำมีของตัวเองอยู่แล้ว ไม่ต้องย้าย
+      if(t.done||t.recurringId)continue; // recurring tasks materialize their own instances, no need to carry over
       out.push({dayKey:k,taskId:t.id});
     }
   }
@@ -1172,7 +1318,7 @@ function updateCarryoverBar(){
   const pending=getPendingCarryoverTasks();
   if(pending.length===0){ bar.style.display="none"; return; }
   bar.style.display="";
-  $("#carryoverText").textContent="มีงานค้าง "+pending.length+" ชิ้นจากวันก่อนหน้า";
+  $("#carryoverText").textContent=pending.length+" pending task(s) from previous days";
 }
 function carryOverPendingTasks(){
   const pending=getPendingCarryoverTasks();
@@ -1199,7 +1345,7 @@ function carryOverPendingTasks(){
     }
     saveState(true); renderTasks();
   });
-  toast(snapshot.length+" งานค้างย้ายมาวันนี้แล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+  toast(snapshot.length+" task(s) moved to today","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
 }
 $("#carryoverBtn").onclick=carryOverPendingTasks;
 function renderTasks(){
@@ -1210,20 +1356,20 @@ function renderTasks(){
   const done=day.tasks.filter(t=>t.done).length;
   $("#taskCount").textContent=day.tasks.length?done+"/"+day.tasks.length:"";
   if(day.tasks.length===0){
-    list.innerHTML='<li class="list-empty">ยังไม่มีงานสำหรับวันนี้</li>'; return;
+    list.innerHTML='<li class="list-empty">No tasks for today yet</li>'; return;
   }
   for(const t of day.tasks){
     const li=document.createElement("li");
     li.className="task"+(t.done?" done":"")+(t.flag?" flag":"");
     li.dataset.id=t.id;
-    const recBadge=t.recurringId?'<button type="button" class="t-rec-icon" aria-label="จัดการงานทำซ้ำ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>':"";
+    const recBadge=t.recurringId?'<button type="button" class="t-rec-icon" aria-label="Manage recurring task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>':"";
     li.innerHTML=`
-      <span class="grip" aria-label="ลากเพื่อจัดลำดับ"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg></span>
-      <button class="check" aria-label="ทำเสร็จ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
+      <span class="grip" aria-label="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg></span>
+      <button class="check" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
       <span class="t-label" role="textbox" tabindex="0">${escapeHtml(t.text)}</span>
       ${recBadge}
-      <button class="flag-btn" aria-label="ทำเครื่องหมายสำคัญ"><svg viewBox="0 0 24 24" fill="${t.flag?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2.5 4L17 12H4"/></svg></button>
-      <button class="t-del" aria-label="ลบงาน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>`;
+      <button class="flag-btn" aria-label="Mark important"><svg viewBox="0 0 24 24" fill="${t.flag?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2.5 4L17 12H4"/></svg></button>
+      <button class="t-del" aria-label="Delete task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>`;
     const t_id=t.id;
     $(".check",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.done=!x.done;saveState();renderTasks();};
     $(".flag-btn",li).onclick=()=>{const x=day.tasks.find(z=>z.id===t_id);x.flag=!x.flag;saveState();renderTasks();};
@@ -1233,7 +1379,7 @@ function renderTasks(){
       day.tasks=day.tasks.filter(z=>z.id!==t_id);
       saveState();renderTasks();
       pushUndo(()=>{ const d=getDay(dk); d.tasks.splice(Math.min(idx,d.tasks.length),0,removed); saveState(); if(currentKey===dk)renderTasks(); });
-      toast("ลบงานแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+      toast("Task deleted","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
     };
     // inline edit
     const lbl=$(".t-label",li);
@@ -1258,13 +1404,13 @@ function openRecurringTaskModal(){
   const prefill=$("#taskInput").value.trim();
   const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip" data-d="'+i+'">'+d+'</button>').join("");
   openModal(`
-    <div class="modal-head"><h3>เพิ่มงานทำซ้ำ</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Add Recurring Task</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="field"><label>ชื่องาน</label><input type="text" id="rtTitle" placeholder="เช่น เช็คอีเมล" value="${escapeAttr(prefill)}"></div>
-      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rtDays">${dowChips}</div></div>
+      <div class="field"><label>Task name</label><input type="text" id="rtTitle" placeholder="e.g. Check email" value="${escapeAttr(prefill)}"></div>
+      <div class="field"><label>Repeat on</label><div class="dow-picker" id="rtDays">${dowChips}</div></div>
     </div>
-    <div class="modal-foot"><button class="btn primary" id="rtSave" style="width:100%">สร้างงานทำซ้ำ</button></div>
+    <div class="modal-foot"><button class="btn primary" id="rtSave" style="width:100%">Create Recurring Task</button></div>
   `);
   let selDays=new Set();
   $$("#rtDays .dow-chip").forEach(ch=>ch.onclick=()=>{
@@ -1274,33 +1420,33 @@ function openRecurringTaskModal(){
   });
   $("#rtSave").onclick=()=>{
     const title=$("#rtTitle").value.trim();
-    if(!title){toast("ใส่ชื่องานก่อน");return;}
-    if(selDays.size===0){toast("เลือกวันที่ต้องการทำซ้ำอย่างน้อย 1 วัน");return;}
+    if(!title){toast("Enter a task name first");return;}
+    if(selDays.size===0){toast("Choose at least 1 day to repeat on");return;}
     const tmpl={id:uid(),type:"task",title,days:[...selDays].sort(),materializedDates:[],u:Date.now()};
     state.recurring=state.recurring||[]; state.recurring.push(tmpl);
     state.recurringUpdated=Date.now();
     saveState(); closeModal();
     $("#taskInput").value="";
     renderTasks();
-    toast("สร้างงานทำซ้ำแล้ว");
+    toast("Recurring task created");
   };
 }
 $("#taskRecurBtn").onclick=openRecurringTaskModal;
 function openRecurringTaskManageModal(recurringId){
   const tmpl=(state.recurring||[]).find(t=>t.id===recurringId);
-  if(!tmpl){ toast("ไม่พบงานทำซ้ำนี้ อาจถูกลบไปแล้ว"); return; }
+  if(!tmpl){ toast("This recurring task was not found, it may have been deleted"); return; }
   const dowChips=DOW_SHORT.map((d,i)=>'<button type="button" class="dow-chip'+(tmpl.days.includes(i)?" sel":"")+'" data-d="'+i+'">'+d+'</button>').join("");
   openModal(`
-    <div class="modal-head"><h3>งานทำซ้ำ</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Recurring Task</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="sync-status">แก้ไขนี้มีผลกับทุกวันในชุด · งานที่เพิ่มไปแล้วในแต่ละวันจะไม่เปลี่ยน</div>
-      <div class="field"><label>ชื่องาน</label><input type="text" id="rtmTitle" value="${escapeAttr(tmpl.title)}"></div>
-      <div class="field"><label>ทำซ้ำในวัน</label><div class="dow-picker" id="rtmDays">${dowChips}</div></div>
+      <div class="sync-status">Editing this affects every day in the set · tasks already added to each day won't change</div>
+      <div class="field"><label>Task name</label><input type="text" id="rtmTitle" value="${escapeAttr(tmpl.title)}"></div>
+      <div class="field"><label>Repeat on</label><div class="dow-picker" id="rtmDays">${dowChips}</div></div>
     </div>
     <div class="modal-foot">
-      <button class="btn danger sm spacer" id="rtmDeleteAll">ลบทั้งชุด</button>
-      <button class="btn primary" id="rtmSave">บันทึก</button>
+      <button class="btn danger sm spacer" id="rtmDeleteAll">Delete entire set</button>
+      <button class="btn primary" id="rtmSave">Save</button>
     </div>
   `);
   let selDays=new Set(tmpl.days);
@@ -1311,21 +1457,21 @@ function openRecurringTaskManageModal(recurringId){
   });
   $("#rtmSave").onclick=()=>{
     const title=$("#rtmTitle").value.trim();
-    if(!title){toast("ใส่ชื่องานก่อน");return;}
-    if(selDays.size===0){toast("เลือกวันอย่างน้อย 1 วัน");return;}
+    if(!title){toast("Enter a task name first");return;}
+    if(selDays.size===0){toast("Choose at least 1 day");return;}
     tmpl.title=title; tmpl.days=[...selDays].sort(); tmpl.u=Date.now();
     state.recurringUpdated=Date.now();
     saveState(); closeModal(); renderTasks();
-    toast("แก้ไขงานทำซ้ำแล้ว");
+    toast("Recurring task updated");
   };
   $("#rtmDeleteAll").onclick=()=>{
-    if(!confirm('ลบงานทำซ้ำ "'+tmpl.title+'" ทั้งชุด? งานที่เพิ่มไปแล้วในแต่ละวันจะไม่ถูกลบ แต่จะไม่เพิ่มใหม่อีก')) return;
+    if(!confirm('Delete the entire recurring task "'+tmpl.title+'"? Tasks already added to each day won\'t be deleted, but no new ones will be added')) return;
     const removed=tmpl;
     state.recurring=state.recurring.filter(t=>t.id!==tmpl.id);
     state.recurringUpdated=Date.now();
     saveState(); closeModal(); renderTasks();
     pushUndo(()=>{ state.recurring=state.recurring||[]; state.recurring.push(removed); state.recurringUpdated=Date.now(); saveState(); });
-    toast("ลบงานทำซ้ำแล้ว (งานเก่ายังอยู่)","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+    toast("Recurring task deleted (existing tasks remain)","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
   };
 }
 
@@ -1360,14 +1506,14 @@ let noteDebounce=null;
 const notesEl=$("#notes");
 notesEl.addEventListener("input",()=>{
   const day=getDay(currentKey); day.note=notesEl.value;
-  $("#charCount").textContent=notesEl.value.length+" ตัวอักษร";
+  $("#charCount").textContent=notesEl.value.length+" characters";
   clearTimeout(noteDebounce);
   noteDebounce=setTimeout(()=>{ saveState(); const s=$("#notesSaved"); s.classList.add("show"); setTimeout(()=>s.classList.remove("show"),1400); },500);
 });
 function renderNotes(){
   const day=getDay(currentKey);
   notesEl.value=day.note||"";
-  $("#charCount").textContent=(day.note||"").length+" ตัวอักษร";
+  $("#charCount").textContent=(day.note||"").length+" characters";
 }
 
 /* ===================== render all ===================== */
@@ -1422,7 +1568,7 @@ function exportJSON(){
   const a=document.createElement("a");
   a.href=url; a.download="daily-planner-"+todayKey()+".json"; a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1500);
-  toast("ส่งออกไฟล์แล้ว");
+  toast("File exported");
 }
 $("#fileInput").onchange=e=>{
   const f=e.target.files[0]; if(!f)return;
@@ -1432,11 +1578,11 @@ $("#fileInput").onchange=e=>{
     const days=data.days||data;
     if(typeof days!=="object")throw 0;
     const keys=Object.keys(days);
-    if(!confirm("นำเข้า "+keys.length+" วัน? วันที่ซ้ำกันจะถูกแทนที่ด้วยไฟล์นี้")){e.target.value="";return;}
+    if(!confirm("Import "+keys.length+" day(s)? Overlapping dates will be replaced by this file")){e.target.value="";return;}
     const now=Date.now();
     keys.forEach(k=>{ const d=days[k]; if(d&&d.u==null) d.u=now; state.days[k]=d; });
-    state.lastModified=now; saveState(); renderAll(); toast("นำเข้าข้อมูลแล้ว ("+keys.length+" วัน)");
-  }catch(err){toast("ไฟล์ไม่ถูกต้อง");} e.target.value=""; };
+    state.lastModified=now; saveState(); renderAll(); toast("Data imported ("+keys.length+" days)");
+  }catch(err){toast("Invalid file");} e.target.value=""; };
   r.readAsText(f);
 };
 
@@ -1473,7 +1619,7 @@ async function gistApi(method,path,body){
     headers:{"Authorization":"Bearer "+gcfg().token,"Accept":"application/vnd.github+json","Content-Type":"application/json"},
     body:body?JSON.stringify(body):undefined
   });
-  if(!res.ok){const t=await res.text().catch(()=>"");throw new Error("GitHub "+res.status+(res.status===401?" (token ไม่ถูกต้อง)":res.status===404?" (ไม่พบ Gist)":"")+" "+t.slice(0,80));}
+  if(!res.ok){const t=await res.text().catch(()=>"");throw new Error("GitHub "+res.status+(res.status===401?" (invalid token)":res.status===404?" (Gist not found)":"")+" "+t.slice(0,80));}
   return res.json();
 }
 async function buildPayload(){
@@ -1484,16 +1630,16 @@ async function buildPayload(){
     if(empty && d.u==null) continue;
     days[k]=d;
   }
-  const obj={days,categories:state.categories||[],categoriesUpdated:state.categoriesUpdated||0,recurring:state.recurring||[],recurringUpdated:state.recurringUpdated||0,templates:state.templates||[],templatesUpdated:state.templatesUpdated||0,lastModified:state.lastModified,_v:5};
+  const obj={days,categories:state.categories||[],categoriesUpdated:state.categoriesUpdated||0,recurring:state.recurring||[],recurringUpdated:state.recurringUpdated||0,templates:state.templates||[],templatesUpdated:state.templatesUpdated||0,termRange:state.termRange||null,termRangeUpdated:state.termRangeUpdated||0,lastModified:state.lastModified,_v:6};
   let content=JSON.stringify(obj);
-  if(gcfg().pass){ if(!cryptoOk)throw new Error("เบราว์เซอร์นี้เข้ารหัสไม่ได้"); content=await encryptStr(content,gcfg().pass); }
+  if(gcfg().pass){ if(!cryptoOk)throw new Error("This browser can't encrypt"); content=await encryptStr(content,gcfg().pass); }
   return content;
 }
 async function parsePayload(content){
-  if(content.startsWith("ENCv1:")){ if(!cryptoOk)throw new Error("เข้ารหัสไว้ แต่เบราว์เซอร์นี้ถอดไม่ได้"); if(!gcfg().pass)throw new Error("ข้อมูลถูกเข้ารหัส ต้องใส่ passphrase ให้ตรงกัน"); content=await decryptStr(content,gcfg().pass); }
+  if(content.startsWith("ENCv1:")){ if(!cryptoOk)throw new Error("Data is encrypted, but this browser can't decrypt it"); if(!gcfg().pass)throw new Error("Data is encrypted — enter the matching passphrase"); content=await decryptStr(content,gcfg().pass); }
   return JSON.parse(content);
 }
-/* merge ราย "วัน": ฝั่งที่แก้ทีหลัง (u ใหม่กว่า) ชนะ — แก้คนละวันคนละเครื่องไม่ทับกัน */
+/* merge per-"day": whichever side was edited later (newer u) wins — edits to different days on different devices never collide */
 function mergeDays(remoteDays){
   let changed=false;
   for(const k in remoteDays){
@@ -1503,32 +1649,39 @@ function mergeDays(remoteDays){
   }
   return changed;
 }
-/* merge หมวดหมู่: ทั้งชุดเทียบเวลาแก้ล่าสุด ฝั่งใหม่กว่าชนะทั้งชุด (รายการเล็ก แก้ไม่บ่อย ไม่ต้อง merge รายรายการ) */
+/* merge categories: compare last-edit time for the whole set, newer side wins the whole set (small list, edited rarely, no need for per-item merge) */
 function mergeCategories(remoteCats,remoteUpdated){
   if(remoteCats && (remoteUpdated||0)>(state.categoriesUpdated||0)){
     state.categories=remoteCats; state.categoriesUpdated=remoteUpdated||0; return true;
   }
   return false;
 }
-/* merge บล็อก/งานทำซ้ำ: หลักการเดียวกับหมวดหมู่ — ทั้งชุด last-write-wins */
+/* merge recurring blocks/tasks: same principle as categories — whole set, last-write-wins */
 function mergeRecurring(remoteRec,remoteUpdated){
   if(remoteRec && (remoteUpdated||0)>(state.recurringUpdated||0)){
     state.recurring=remoteRec; state.recurringUpdated=remoteUpdated||0; return true;
   }
   return false;
 }
-/* merge เทมเพลต: หลักการเดียวกัน — ทั้งชุด last-write-wins */
+/* merge templates: same principle — whole set, last-write-wins */
 function mergeTemplates(remoteTpl,remoteUpdated){
   if(remoteTpl && (remoteUpdated||0)>(state.templatesUpdated||0)){
     state.templates=remoteTpl; state.templatesUpdated=remoteUpdated||0; return true;
   }
   return false;
 }
+/* merge term range: also whole-value last-write-wins (single value across the whole system) */
+function mergeTermRange(remoteRange,remoteUpdated){
+  if(remoteRange && (remoteUpdated||0)>(state.termRangeUpdated||0)){
+    state.termRange=remoteRange; state.termRangeUpdated=remoteUpdated||0; return true;
+  }
+  return false;
+}
 function setSyncDot(s){ const d=$("#syncDot"); if(d) d.className="sync-dot "+s; }
 function setSyncStatus(msg,cls){ const e=$("#syncStatus"); if(e){e.textContent=msg; e.className="sync-status"+(cls?" "+cls:"");} }
-function updateSyncTitle(st){ const b=$("#syncBtn"); if(!b)return; b.title = st==="pending"?"มีการเปลี่ยนแปลงที่ยังไม่ซิงค์" : st==="busy"?"กำลังซิงค์..." : st==="err"?"ซิงค์มีปัญหา — แตะเพื่อลองใหม่" : "ซิงค์ข้อมูล"; }
+function updateSyncTitle(st){ const b=$("#syncBtn"); if(!b)return; b.title = st==="pending"?"Unsynced changes" : st==="busy"?"Syncing..." : st==="err"?"Sync issue — tap to retry" : "Sync data"; }
 
-/* Sync Code: รวม token + gist id + passphrase เป็นโค้ดเดียว ย้ายเครื่องในขั้นตอนเดียว */
+/* Sync Code: combines token + gist id + passphrase into one code, move devices in a single step */
 function makeSyncCode(){
   const c=gcfg();
   const json=JSON.stringify({t:c.token||"",g:c.gistId||"",p:c.pass||""});
@@ -1537,9 +1690,9 @@ function makeSyncCode(){
 function applySyncCode(code){
   code=(code||"").trim().replace(/^["']|["']$/g,"");
   const idx=code.search(/DPSYNC1:/i);
-  if(idx<0)throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
+  if(idx<0)throw new Error("Invalid code format");
   let payload=code.slice(idx+8).replace(/\s+/g,"").replace(/[^A-Za-z0-9+/=].*$/,"");
-  if(!payload)throw new Error("รูปแบบโค้ดไม่ถูกต้อง");
+  if(!payload)throw new Error("Invalid code format");
   const o=JSON.parse(new TextDecoder().decode(unb64(payload)));
   const c=gcfg(); c.token=o.t||""; c.gistId=o.g||""; c.pass=o.p||""; saveState(false);
 }
@@ -1551,14 +1704,14 @@ async function copyText(txt){
   }
 }
 
-/* syncNow = ดึง-รวม-ดัน (เส้นทางหลัก ปลอดภัยต่อหลายเครื่อง) */
+/* syncNow = pull-merge-push (main path, safe across multiple devices) */
 let syncing=false;
 async function syncNow(silent){
   const c=gcfg();
-  if(!c.token||!c.gistId){ if(!silent)setSyncStatus("ใส่ token และ gist id ก่อน หรือกดสร้าง Gist","err"); return; }
-  if(!navigator.onLine){ if(!silent)setSyncStatus("ออฟไลน์อยู่ ต่อเน็ตก่อนซิงค์","err"); setSyncDot("off"); return; }
+  if(!c.token||!c.gistId){ if(!silent)setSyncStatus("Enter a token and gist id first, or create a Gist","err"); return; }
+  if(!navigator.onLine){ if(!silent)setSyncStatus("You're offline, connect to the internet before syncing","err"); setSyncDot("off"); return; }
   if(syncing) return;
-  syncing=true; setSyncDot("busy"); updateSyncTitle("busy"); if(!silent)setSyncStatus("กำลังซิงค์...","");
+  syncing=true; setSyncDot("busy"); updateSyncTitle("busy"); if(!silent)setSyncStatus("Syncing...","");
   try{
     const r=await gistApi("GET","/"+c.gistId);
     const file=r.files&&r.files[GIST_FILE];
@@ -1571,51 +1724,52 @@ async function syncNow(silent){
       if(remote&&mergeCategories(remote.categories,remote.categoriesUpdated)) remoteChanged=true;
       if(remote&&mergeRecurring(remote.recurring,remote.recurringUpdated)) remoteChanged=true;
       if(remote&&mergeTemplates(remote.templates,remote.templatesUpdated)) remoteChanged=true;
+      if(remote&&mergeTermRange(remote.termRange,remote.termRangeUpdated)) remoteChanged=true;
     }
     if(remoteChanged){ saveState(false); renderAll(); }
     const content=await buildPayload();
     await gistApi("PATCH","/"+c.gistId,{files:{[GIST_FILE]:{content}}});
     c.lastSync=Date.now(); saveState(false);
     setSyncDot("ok"); updateSyncTitle("ok");
-    if(!silent) setSyncStatus("ซิงค์เรียบร้อย · "+new Date().toLocaleTimeString("th-TH"),"ok");
-    if(remoteChanged) toast("อัปเดตจากอุปกรณ์อื่นแล้ว");
-    else if(!silent) toast("ซิงค์แล้ว");
-  }catch(e){ setSyncDot("err"); updateSyncTitle("err"); if(!silent) setSyncStatus("ซิงค์ไม่สำเร็จ: "+e.message,"err"); }
+    if(!silent) setSyncStatus("Synced · "+new Date().toLocaleTimeString(),"ok");
+    if(remoteChanged) toast("Updated from another device");
+    else if(!silent) toast("Synced");
+  }catch(e){ setSyncDot("err"); updateSyncTitle("err"); if(!silent) setSyncStatus("Sync failed: "+e.message,"err"); }
   finally{ syncing=false; }
 }
 async function createGist(){
-  setSyncStatus("กำลังสร้าง Gist ใหม่...","");setSyncDot("busy");
+  setSyncStatus("Creating a new Gist...","");setSyncDot("busy");
   try{
     const content=await buildPayload();
     const r=await gistApi("POST","",{description:"Daily Planner — sync data",public:false,files:{[GIST_FILE]:{content}}});
     gcfg().gistId=r.id; saveState(false);
     const gi=$("#gGistId"); if(gi) gi.value=r.id;
-    setSyncStatus("สร้าง Gist แล้ว · บันทึก id อัตโนมัติ — คัดลอก Sync Code ไปใช้เครื่องอื่นได้เลย","ok"); setSyncDot("ok"); updateSyncTitle("ok");
-    toast("สร้าง Gist และดันข้อมูลขึ้นแล้ว");
-  }catch(e){setSyncStatus("สร้างไม่สำเร็จ: "+e.message,"err");setSyncDot("err");}
+    setSyncStatus("Gist created · id saved automatically — copy the Sync Code to use on other devices","ok"); setSyncDot("ok"); updateSyncTitle("ok");
+    toast("Gist created and data pushed");
+  }catch(e){setSyncStatus("Failed to create: "+e.message,"err");setSyncDot("err");}
 }
-/* force = เขียนทับทิศทางเดียว ใช้ตอนต้องการบังคับ */
+/* force = overwrite in one direction only, used when you want to force it */
 async function forcePush(){
-  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("ใส่ token และ gist id ก่อน","err");return;}
-  setSyncStatus("กำลังดันขึ้นทับคลาวด์...","");setSyncDot("busy");
-  try{ const content=await buildPayload(); await gistApi("PATCH","/"+c.gistId,{files:{[GIST_FILE]:{content}}}); c.lastSync=Date.now(); saveState(false); setSyncStatus("ดันขึ้นทับคลาวด์เรียบร้อย","ok");setSyncDot("ok");updateSyncTitle("ok");toast("ดันขึ้นแล้ว"); }
-  catch(e){setSyncDot("err");setSyncStatus("ดันไม่สำเร็จ: "+e.message,"err");}
+  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("Enter a token and gist id first","err");return;}
+  setSyncStatus("Pushing to the cloud (overwrite)...","");setSyncDot("busy");
+  try{ const content=await buildPayload(); await gistApi("PATCH","/"+c.gistId,{files:{[GIST_FILE]:{content}}}); c.lastSync=Date.now(); saveState(false); setSyncStatus("Pushed to the cloud successfully","ok");setSyncDot("ok");updateSyncTitle("ok");toast("Pushed"); }
+  catch(e){setSyncDot("err");setSyncStatus("Push failed: "+e.message,"err");}
 }
 async function forcePull(){
-  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("ใส่ token และ gist id ก่อน","err");return;}
-  if(!confirm("ดึงข้อมูลจากคลาวด์มาทับข้อมูลในเครื่องนี้ทั้งหมด?")) return;
-  setSyncStatus("กำลังดึงลงทับเครื่อง...","");setSyncDot("busy");
+  const c=gcfg(); if(!c.token||!c.gistId){setSyncStatus("Enter a token and gist id first","err");return;}
+  if(!confirm("Pull data from the cloud and overwrite everything on this device?")) return;
+  setSyncStatus("Pulling to this device (overwrite)...","");setSyncDot("busy");
   try{
     const r=await gistApi("GET","/"+c.gistId);
     const file=r.files&&r.files[GIST_FILE];
-    if(!file)throw new Error("ไม่พบไฟล์ข้อมูลใน Gist");
+    if(!file)throw new Error("No data file found in the Gist");
     let content=file.content;
     if(file.truncated&&file.raw_url) content=await (await fetch(file.raw_url)).text();
     const remote=await parsePayload(content);
     state.days=remote.days||{}; state.lastModified=remote.lastModified||Date.now();
     saveState(false); renderAll();
-    setSyncStatus("ดึงลงทับเครื่องเรียบร้อย","ok");setSyncDot("ok");updateSyncTitle("ok");toast("ดึงข้อมูลจากคลาวด์แล้ว");
-  }catch(e){setSyncDot("err");setSyncStatus("ดึงไม่สำเร็จ: "+e.message,"err");}
+    setSyncStatus("Pulled to this device successfully","ok");setSyncDot("ok");updateSyncTitle("ok");toast("Data pulled from the cloud");
+  }catch(e){setSyncDot("err");setSyncStatus("Pull failed: "+e.message,"err");}
 }
 function scheduleAutoSync(){
   const c=gcfg();
@@ -1635,56 +1789,56 @@ function openSyncModal(){
   const c=gcfg();
   const configured=!!(c.token&&c.gistId);
   openModal(`
-    <div class="modal-head"><h3>ตั้งค่าซิงค์</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Sync Settings</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="sync-status" id="syncStatus">${configured?"เชื่อมต่อแล้ว · ซิงค์อัตโนมัติเมื่อแก้ไขและตอนเปิด/สลับแอป":"ตั้งครั้งแรก: ใส่ token แล้วกด ‘สร้าง Gist ใหม่’ — หรือวาง Sync Code จากเครื่องอื่น"}</div>
+      <div class="sync-status" id="syncStatus">${configured?"Connected · syncs automatically on edits and when opening/switching to the app":"First-time setup: enter a token then tap 'Create New Gist' — or paste a Sync Code from another device"}</div>
 
-      <div class="field"><label>วาง Sync Code จากเครื่องอื่น <span class="hint">(ย้ายเครื่องในขั้นตอนเดียว)</span></label>
-        <div style="display:flex;gap:8px"><input type="text" id="codeInput" style="flex:1;min-width:0" placeholder="DPSYNC1:..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn sm" id="codeApply">ใช้โค้ด</button></div></div>
+      <div class="field"><label>Paste Sync Code from another device <span class="hint">(move devices in one step)</span></label>
+        <div style="display:flex;gap:8px"><input type="text" id="codeInput" style="flex:1;min-width:0" placeholder="DPSYNC1:..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn sm" id="codeApply">Use code</button></div></div>
       <div class="divider"></div>
 
-      <div class="field"><label>GitHub Token <span class="hint">(scope: gist เท่านั้น)</span></label>
-        <input type="password" id="gToken" placeholder="ghp_... หรือ github_pat_..." value="${escapeAttr(c.token||"")}"></div>
+      <div class="field"><label>GitHub Token <span class="hint">(scope: gist only)</span></label>
+        <input type="password" id="gToken" placeholder="ghp_... or github_pat_..." value="${escapeAttr(c.token||"")}"></div>
       <div class="field"><label>Gist ID</label>
-        <input type="text" id="gGistId" placeholder="มีอยู่แล้ววางที่นี่ หรือกดสร้างใหม่" value="${escapeAttr(c.gistId||"")}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
-      <div class="field"><label>Passphrase เข้ารหัส <span class="hint">(เว้นว่าง = ไม่เข้ารหัส)</span></label>
-        <input type="password" id="gPass" placeholder="${cryptoOk?'รหัสลับสำหรับเข้ารหัสข้อมูล':'เบราว์เซอร์นี้เข้ารหัสไม่ได้'}" value="${escapeAttr(c.pass||"")}" ${cryptoOk?"":"disabled"}>
-        <span class="hint">ใส่ค่าเดียวกันทุกเครื่องจึงจะอ่านกันได้</span></div>
-      <div class="checkbox-row"><input type="checkbox" id="gAuto" ${c.auto?"checked":""}><label for="gAuto">ซิงค์อัตโนมัติ (เมื่อแก้ไข + ตอนเปิด/สลับแอป)</label></div>
+        <input type="text" id="gGistId" placeholder="Paste an existing one here, or create a new Gist" value="${escapeAttr(c.gistId||"")}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+      <div class="field"><label>Encryption passphrase <span class="hint">(leave blank = no encryption)</span></label>
+        <input type="password" id="gPass" placeholder="${cryptoOk?'Secret passphrase for encrypting data':'This browser can\'t encrypt'}" value="${escapeAttr(c.pass||"")}" ${cryptoOk?"":"disabled"}>
+        <span class="hint">Use the same value on every device so they can read each other's data</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="gAuto" ${c.auto?"checked":""}><label for="gAuto">Auto-sync (on edit + when opening/switching to the app)</label></div>
 
       <div class="divider"></div>
-      <button class="btn primary" id="codeCopy" style="width:100%;margin-bottom:9px">คัดลอก Sync Code ของเครื่องนี้</button>
+      <button class="btn primary" id="codeCopy" style="width:100%;margin-bottom:9px">Copy this device's Sync Code</button>
       <div class="btn-grid">
-        <button class="btn primary" id="gSmartBtn">ซิงค์เดี๋ยวนี้</button>
-        <button class="btn" id="gCreateBtn">สร้าง Gist ใหม่</button>
-        <button class="btn sm" id="gPullBtn">ดึงลงทับ (force)</button>
-        <button class="btn sm" id="gPushBtn">ดันขึ้นทับ (force)</button>
+        <button class="btn primary" id="gSmartBtn">Sync now</button>
+        <button class="btn" id="gCreateBtn">Create New Gist</button>
+        <button class="btn sm" id="gPullBtn">Pull (force)</button>
+        <button class="btn sm" id="gPushBtn">Push (force)</button>
       </div>
-      <span class="hint" style="display:block;margin-top:10px">Sync Code มี token อยู่ข้างใน เก็บเป็นความลับ — ส่งให้ตัวเองผ่าน Universal Clipboard / AirDrop ได้</span>
+      <span class="hint" style="display:block;margin-top:10px">The Sync Code contains your token — keep it secret. Send it to yourself via Universal Clipboard / AirDrop</span>
     </div>
-    <div class="modal-foot"><button class="btn primary" data-close>เสร็จ</button></div>
+    <div class="modal-foot"><button class="btn primary" data-close>Done</button></div>
   `);
   const persist=()=>{ const g=gcfg(); g.token=$("#gToken").value.trim(); g.gistId=$("#gGistId").value.trim(); g.pass=cryptoOk?$("#gPass").value:""; g.auto=$("#gAuto").checked; saveState(false); updateSyncDotIdle(); };
   ["gToken","gGistId","gPass","gAuto"].forEach(id=>{const el=$("#"+id);el.addEventListener("change",persist);el.addEventListener("input",persist);});
   $("#gSmartBtn").onclick=()=>{persist();syncNow(false);};
-  $("#gCreateBtn").onclick=()=>{persist(); if(!gcfg().token){setSyncStatus("ใส่ token ก่อนสร้าง Gist","err");return;} createGist();};
+  $("#gCreateBtn").onclick=()=>{persist(); if(!gcfg().token){setSyncStatus("Enter a token before creating a Gist","err");return;} createGist();};
   $("#gPullBtn").onclick=()=>{persist();forcePull();};
   $("#gPushBtn").onclick=()=>{persist();forcePush();};
-  $("#codeCopy").onclick=async()=>{ persist(); if(!gcfg().token||!gcfg().gistId){toast("ตั้งค่า token + สร้าง Gist ก่อน");return;} const ok=await copyText(makeSyncCode()); toast(ok?"คัดลอก Sync Code แล้ว":"คัดลอกไม่ได้ ลองคัดลอกเอง"); };
-  $("#codeApply").onclick=()=>{ try{ applySyncCode($("#codeInput").value); $("#gToken").value=gcfg().token; $("#gGistId").value=gcfg().gistId; $("#gPass").value=gcfg().pass; updateSyncDotIdle(); setSyncStatus("ใส่โค้ดแล้ว · กำลังดึงข้อมูล...","ok"); syncNow(false); }catch(e){ setSyncStatus("โค้ดไม่ถูกต้อง: "+e.message,"err"); toast("Sync Code ไม่ถูกต้อง"); } };
+  $("#codeCopy").onclick=async()=>{ persist(); if(!gcfg().token||!gcfg().gistId){toast("Set up a token + create a Gist first");return;} const ok=await copyText(makeSyncCode()); toast(ok?"Sync Code copied":"Couldn't copy — try copying it manually"); };
+  $("#codeApply").onclick=()=>{ try{ applySyncCode($("#codeInput").value); $("#gToken").value=gcfg().token; $("#gGistId").value=gcfg().gistId; $("#gPass").value=gcfg().pass; updateSyncDotIdle(); setSyncStatus("Code applied · pulling data...","ok"); syncNow(false); }catch(e){ setSyncStatus("Invalid code: "+e.message,"err"); toast("Invalid Sync Code"); } };
 }
 function updateSyncDotIdle(){ const c=gcfg(); setSyncDot(c.token&&c.gistId?"ok":"off"); updateSyncTitle("ok"); }
 
 /* ===================== help ===================== */
 /* ===================== day templates ===================== */
 function renderTplListHtml(){
-  if(!(state.templates||[]).length) return '<div class="list-empty">ยังไม่มีเทมเพลต — บันทึกจากด้านล่างได้เลย</div>';
+  if(!(state.templates||[]).length) return '<div class="list-empty">No templates yet — save one below</div>';
   return state.templates.map(t=>
     '<div class="tpl-row" data-id="'+t.id+'">'+
-      '<div class="tpl-info"><input type="text" class="tpl-name-input" value="'+escapeAttr(t.name)+'"><span class="tpl-meta">'+t.blocks.length+' บล็อก</span></div>'+
-      '<button type="button" class="btn sm tpl-apply">ใช้กับวันนี้</button>'+
-      '<button type="button" class="tpl-del" aria-label="ลบเทมเพลต"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
+      '<div class="tpl-info"><input type="text" class="tpl-name-input" value="'+escapeAttr(t.name)+'"><span class="tpl-meta">'+t.blocks.length+' block(s)</span></div>'+
+      '<button type="button" class="btn sm tpl-apply">Apply to today</button>'+
+      '<button type="button" class="tpl-del" aria-label="Delete template"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'+
     '</div>'
   ).join("");
 }
@@ -1703,17 +1857,17 @@ function bindTplListEvents(){
       const clones=tpl.blocks.map(b=>({id:uid(),title:b.title,start:b.start,end:b.end,color:b.color,categoryId:b.categoryId||null,note:b.note||""}));
       day.blocks.push(...clones);
       saveState(); closeModal(); renderSchedule();
-      toast('เพิ่ม "'+tpl.name+'" ('+clones.length+' บล็อก) เข้าวันนี้แล้ว');
+      toast('Added "'+tpl.name+'" ('+clones.length+' block(s)) to today');
     };
     $(".tpl-del",row).onclick=()=>{
-      if(!confirm('ลบเทมเพลต "'+tpl.name+'"?')) return;
+      if(!confirm('Delete template "'+tpl.name+'"?')) return;
       const removed=tpl;
       state.templates=state.templates.filter(t=>t.id!==id);
       state.templatesUpdated=Date.now(); saveState(false);
       $("#tplList").innerHTML=renderTplListHtml();
       bindTplListEvents();
       pushUndo(()=>{ state.templates=state.templates||[]; state.templates.push(removed); state.templatesUpdated=Date.now(); saveState(false); });
-      toast("ลบเทมเพลตแล้ว","เลิกทำ",()=>{ if(lastUndo)lastUndo.restoreFn(); });
+      toast("Template deleted","Undo",()=>{ if(lastUndo)lastUndo.restoreFn(); });
     };
   });
 }
@@ -1721,48 +1875,49 @@ function openTemplateModal(){
   const dObj=dateFromKey(currentKey);
   const dayLabel=dObj.getDate()+" "+MON_SHORT[dObj.getMonth()]+" "+dObj.getFullYear();
   openModal(`
-    <div class="modal-head"><h3>เทมเพลตตาราง</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>Day Templates</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body">
-      <div class="sync-status">"ใช้กับวันนี้" หมายถึงวันที่กำลังดูอยู่ (${dayLabel}) — จะเพิ่มบล็อกเข้าไป ไม่ลบของเดิม</div>
+      <div class="sync-status">"Apply to today" refers to the day you're currently viewing (${dayLabel}) — it adds blocks, it doesn't delete existing ones</div>
       <div id="tplList">${renderTplListHtml()}</div>
       <div class="divider"></div>
-      <div class="field"><label>บันทึกวันนี้เป็นเทมเพลตใหม่</label>
+      <div class="field"><label>Save today as a new template</label>
         <div style="display:flex;gap:8px">
-          <input type="text" id="newTplName" placeholder="ตั้งชื่อเทมเพลต" style="flex:1;min-width:0">
-          <button class="btn sm primary" id="saveTplBtn">บันทึก</button>
+          <input type="text" id="newTplName" placeholder="Name this template" style="flex:1;min-width:0">
+          <button class="btn sm primary" id="saveTplBtn">Save</button>
         </div>
       </div>
     </div>
-    <div class="modal-foot"><button class="btn primary" data-close>เสร็จ</button></div>
+    <div class="modal-foot"><button class="btn primary" data-close>Done</button></div>
   `);
   bindTplListEvents();
   $("#saveTplBtn").onclick=()=>{
     const name=$("#newTplName").value.trim();
-    if(!name){toast("ตั้งชื่อเทมเพลตก่อน");return;}
+    if(!name){toast("Enter a template name first");return;}
     const day=getDay(currentKey);
-    if(!day.blocks.length){toast("วันนี้ยังไม่มีบล็อกให้บันทึกเป็นเทมเพลต");return;}
+    if(!day.blocks.length){toast("Today has no blocks to save as a template yet");return;}
     const snap=day.blocks.map(b=>({title:b.title,start:b.start,end:b.end,color:b.color,categoryId:b.categoryId||null,note:b.note||""}));
     const tpl={id:uid(),name,blocks:snap,createdAt:Date.now(),u:Date.now()};
     state.templates=state.templates||[]; state.templates.push(tpl);
     state.templatesUpdated=Date.now(); saveState(false);
     openTemplateModal();
-    toast("บันทึกเทมเพลตแล้ว");
+    toast("Template saved");
   };
 }
 
 function openHelp(){
   openModal(`
-    <div class="modal-head"><h3>วิธีใช้</h3>
-      <button class="x" data-close aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-head"><h3>How to Use</h3>
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="modal-body" style="font-size:14px;line-height:1.65;color:var(--ink-soft)">
-      <p style="margin:0 0 12px"><b style="color:var(--ink)">ตารางเวลา</b> — กดปุ่ม “บล็อก” หรือแตะที่ timeline เปล่าๆ เพื่อเพิ่มช่วงเวลา กำหนดเริ่ม–จบและสีได้ แตะที่บล็อกเพื่อแก้/ลบ เส้นประแดงคือเวลาปัจจุบัน</p>
-      <p style="margin:0 0 12px"><b style="color:var(--ink)">รายการงาน</b> — พิมพ์แล้วกด Enter เพิ่มงาน · แตะข้อความเพื่อแก้ · ลากที่จุดด้านซ้ายเพื่อจัดลำดับ · ไอคอนธง= ทำเครื่องหมายสำคัญ</p>
-      <p style="margin:0 0 12px"><b style="color:var(--ink)">โน้ต/ไดอารี่</b> — บันทึกอิสระต่อวัน บันทึกอัตโนมัติ</p>
-      <p style="margin:0 0 12px"><b style="color:var(--ink)">ข้อมูล</b> — ทุกอย่างเก็บในเครื่องอัตโนมัติ (เปิดไฟล์นี้ในเบราว์เซอร์โดยตรงเพื่อให้บันทึกถาวร) · เมนู ⋯ มีส่งออก/นำเข้าไฟล์ · ตั้งค่าซิงค์ผ่าน GitHub Gist เพื่อใช้ข้ามเครื่อง</p>
-      <p style="margin:0;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)">การซิงค์ต้องต่อเน็ตและใส่ GitHub token (scope: gist) — ใส่ passphrase เพื่อเข้ารหัสก่อนอัปก็ได้</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">Timeline</b> — Tap the "Block" button or tap an empty spot on the timeline to add a time block. Set start/end time and color. Tap a block to edit/delete it. The dashed red line marks the current time.</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">Class Schedule</b> — On the add-block screen, tap the "Class" tab to create a subject that repeats weekly (subject name + room + class days, with a one-tap Mon–Fri select). Set "Term dates" on the same screen — classes only show up within that range, and it's shared across all classes.</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">Task List</b> — Type and press Enter to add a task · tap the text to edit · drag the handle on the left to reorder · flag icon = mark as important</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">Notes/Journal</b> — A free-form note per day, saved automatically</p>
+      <p style="margin:0 0 12px"><b style="color:var(--ink)">Data</b> — Everything is saved locally and automatically (open this file directly in a browser for it to persist) · the ⋯ menu has export/import file options · set up sync via GitHub Gist to use across devices</p>
+      <p style="margin:0;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)">Syncing requires an internet connection and a GitHub token (scope: gist) — you can add a passphrase to encrypt before uploading</p>
     </div>
-    <div class="modal-foot"><button class="btn primary" data-close>เข้าใจแล้ว</button></div>
+    <div class="modal-foot"><button class="btn primary" data-close>Got it</button></div>
   `);
 }
 
@@ -1814,7 +1969,7 @@ $("#addBlock").onclick=()=>openBlockModal(null,540);
     const n=new Date(); const mins=currentKey===todayKey()?n.getHours()*60+n.getMinutes():7*60;
     w.scrollTop=Math.max(0,mins*PMIN-120);
   },80);
-  // auto-sync on load (ดึง-รวม-ดัน) + ซิงค์ตอนเปิด/สลับกลับมาที่แอป
+  // auto-sync on load (pull-merge-push) + sync when opening/switching back to the app
   const c=gcfg();
   if(c.token&&c.gistId&&navigator.onLine){ syncNow(true).catch(()=>{}); }
   document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") syncOnFocus(); });
